@@ -2,24 +2,10 @@ import React from "react";
 import burgerConstructorStyles from './burger-constructor.module.css';
 import { ConstructorElement, CurrencyIcon, Button, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
-
-const ingredientType = PropTypes.shape({
-    calories: PropTypes.number,
-    carbohydrates: PropTypes.number,
-    fat: PropTypes.number,
-    image: PropTypes.string,
-    image_large: PropTypes.string,
-    image_mobile: PropTypes.string,
-    name: PropTypes.string,
-    price: PropTypes.number,
-    proteins: PropTypes.number,
-    type: PropTypes.string,
-    __v: PropTypes.number,
-    _id: PropTypes.string
-});
+import { ingredientType } from "../../utils/common";
 
 export const BurgerConstructor = (props: any) => {
-    return (
+    return ( props.data.length &&
         <section className={burgerConstructorStyles.constructorBox}>
             <div className="pl-10 pr-10 pt-25 mb-10 ml-40">
                 <ul className={burgerConstructorStyles.ul}>
