@@ -1,4 +1,5 @@
 import modalOverlayStyles from './modal-overlay.module.css';
+import PropTypes from 'prop-types';
 
 const ModalOverlay = (props) => {
 
@@ -9,5 +10,9 @@ const ModalOverlay = (props) => {
     );
 
 }
+
+ModalOverlay.propTypes = {
+    children: PropTypes.node.isRequired,
+};
 
 export {ModalOverlay};
