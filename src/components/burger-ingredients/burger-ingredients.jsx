@@ -5,34 +5,39 @@ import PropTypes from 'prop-types';
 import { ingredientType } from "../../utils/common";
 
 
-export const BurgerIngredients = (props: any) => {
+export const BurgerIngredients = (props) => {
     
-    const [current, setCurrent] = React.useState('Булки');
-    const ingredientsGroups = [props.data.filter((el: any) => el.type == "bun"), props.data.filter((el: any) => el.type == "sauce"), props.data.filter((el: any) => el.type == "main")];
-    const nameOfGroups = ["Булки", "Соусы", "Начинки"];
+    const [current, setCurrent] = React.useState('bun');
+    const ingredientsGroups = [props.data.filter((el) => el.type == "bun"), props.data.filter((el) => el.type == "sauce"), props.data.filter((el) => el.type == "main")];
+    const dataOfGroups = [["bun", "Булки"], ["sauce", "Соусы"], ["main", "Начинки"]];
+
+    const handlerTabClick = (tab) => {
+        setCurrent(tab);
+        document.querySelector(`#${tab}`).scrollIntoView({behavior: 'smooth'});
+    };
 
     return (
         props.data.length &&
         <section className={burgerIngredientsStyles.ingredientsBox}>
             <h1 className="text text_type_main-large mt-10 mb-10">Соберите бургер</h1>
             <div className="mb-10" style={{ display: 'flex' }}>
-                <Tab value="Булки" active={current === 'Булки'} onClick={setCurrent}>
+                <Tab value="bun" active={current === 'bun'} onClick={handlerTabClick}>
                     Булки
                 </Tab>
-                <Tab value="Соусы" active={current === 'Соусы'} onClick={setCurrent}>
+                <Tab value="sauce" active={current === 'sauce'} onClick={handlerTabClick}>
                     Соусы
                 </Tab>
-                <Tab value="Начинки" active={current === 'Начинки'} onClick={setCurrent}>
+                <Tab value="main" active={current === 'main'} onClick={handlerTabClick}>
                     Начинки
                 </Tab>
             </div>
             <div className={burgerIngredientsStyles.ingredientsList}>
-                {ingredientsGroups.map((group: any, index) => {
+                {ingredientsGroups.map((group, index) => {
                     return (
                         <div className="pb-10">
-                            <h2 className="text text_type_main-medium mb-6">{nameOfGroups[index]}</h2>
+                            <h2 id={dataOfGroups[index][0]} className="text text_type_main-medium mb-6">{dataOfGroups[index][1]}</h2>
                             <ul className={burgerIngredientsStyles.ul}>
-                                {group.map((el: any) => {
+                                {group.map((el) => {
                                     return (
                                         <li key={el._id}>
                                             <div className={burgerIngredientsStyles.card}>

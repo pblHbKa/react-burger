@@ -5,6 +5,7 @@ import { BurgerConstructor } from '../burger-constructor/burger-constructor';
 import { BurgerIngredients } from '../burger-ingredients/burger-ingredients';
 import { apiAdress } from '../../utils/common';
 import data from '../../utils/data';
+import { Modal } from '../modal/modal';
 
 function App() {
 
@@ -27,6 +28,9 @@ function App() {
         <BurgerIngredients data={ingredients} />
         <BurgerConstructor data={ingredients} />
       </main>
+      {/* <Modal>
+        {<p>Работает</p>}
+      </Modal> */}
     </>
   );
 }

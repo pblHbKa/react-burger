@@ -1,0 +1,20 @@
+.closeButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.modalBlock {
+    background-color: #1C1C21;
+    position: relative;
+    width: 720px;
+    min-height: 539px;
+    margin: auto;
+    border-radius: 40px;
+}
+
+.details {
+    display: flex;
+    align-items: center;
+    margin: 0 100px;
+}

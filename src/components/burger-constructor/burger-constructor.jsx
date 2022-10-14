@@ -4,7 +4,7 @@ import { ConstructorElement, CurrencyIcon, Button, DragIcon } from '@ya.praktiku
 import PropTypes from 'prop-types';
 import { ingredientType } from "../../utils/common";
 
-export const BurgerConstructor = (props: any) => {
+export const BurgerConstructor = (props) => {
     return ( props.data.length &&
         <section className={burgerConstructorStyles.constructorBox}>
             <div className="pl-10 pr-10 pt-25 mb-10 ml-40">
@@ -18,8 +18,8 @@ export const BurgerConstructor = (props: any) => {
                             thumbnail={props.data[0].image}
                         />
                     </li>
-                    {props.data.filter((el: any) => el.type !== "bun")
-                        .map((el: any) => {
+                    {props.data.filter((el) => el.type !== "bun")
+                        .map((el) => {
                             return (
                                 <li className={burgerConstructorStyles.li} key={el._id}>
                                     <DragIcon type={"primary"} />
