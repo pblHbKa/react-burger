@@ -2,6 +2,7 @@
     position: absolute;
     top: 0;
     right: 0;
+    cursor: pointer;
 }
 
 .modalBlock {
@@ -11,6 +12,7 @@
     min-height: 539px;
     margin: auto;
     border-radius: 40px;
+    cursor: default;
 }
 
 .details {

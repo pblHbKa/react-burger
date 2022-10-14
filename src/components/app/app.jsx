@@ -7,6 +7,7 @@ import { apiAdress } from '../../utils/common';
 import data from '../../utils/data';
 import { Modal } from '../modal/modal';
 import { OrderDetails } from '../order-details/order-details';
+import { IngredientDetails } from '../ingredient-details/ingredient-details';
 
 function App() {
 
@@ -29,9 +30,10 @@ function App() {
         <BurgerIngredients data={ingredients} />
         <BurgerConstructor data={ingredients} />
       </main>
-      <Modal>
-        <OrderDetails orderNumber="123456"/>
-      </Modal>
+      {/* <Modal>
+        {/* <OrderDetails orderNumber="123456"/> */}
+        {/* <IngredientDetails data={ingredients[0]}/>
+      </Modal> */}
     </>
   );
 }

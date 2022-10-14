@@ -11,24 +11,24 @@ const Modal = (props) => {
 
     const closeModal = props.closeModal;
 
-    useEffect(() => {
+    const handlerOnClick = (e) => {
+        e.target.classList.contains("overlay") && closeModal();
+    }
 
+    useEffect(() => {
         const onKeydown = (ev) => {
             ev.key === 'Escape' && closeModal();
         }
-
         document.addEventListener('keydown', onKeydown);
-
         return () => {
             document.removeEventListener('keydown', onKeydown);
         }
-
     });
 
     return ReactDom.createPortal(
-        <ModalOverlay>
+        <ModalOverlay onClick={handlerOnClick}>
         <div className={modalStyles.modalBlock}>
-            <h4 className="text text_type_main-large ml-10 mr-10 mt-10">Hf,jnftn</h4>
+            {props.title && <h4 className="text text_type_main-large ml-10 mr-10 mt-10">{props.title}</h4>}
             <div onClick={props.closeModal} className={`${modalStyles.closeButton} mt-15 mr-10`}>
                 <CloseIcon type="primary" />
             </div>
@@ -43,7 +43,8 @@ const Modal = (props) => {
 
 Modal.propTypes = {
     closeModal: PropTypes.func.isRequired,
-    children: PropTypes.node.isRequired
+    children: PropTypes.node.isRequired,
+    title: PropTypes.string
 };
 
 export { Modal }
