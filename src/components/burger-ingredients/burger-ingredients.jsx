@@ -1,79 +1,87 @@
-import {useState} from "react";
-import burgerIngredientsStyles from './burger-ingredients.module.css';
-import { Tab, Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import PropTypes from 'prop-types';
+import { useState, useMemo } from "react";
+import burgerIngredientsStyles from "./burger-ingredients.module.css";
+import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
+import PropTypes from "prop-types";
 import { ingredientType } from "../../utils/common";
 import { Modal } from "../modal/modal";
 import { IngredientDetails } from "../ingredient-details/ingredient-details";
+import { IngredientsCategory } from "../ingredients-category/ingredients-category";
 
+export const BurgerIngredients = ({ data }) => {
+  const [current, setCurrent] = useState("bun");
 
-export const BurgerIngredients = (props) => {
+  const ingredientsGroups = useMemo(() => {
+    const buns = data.filter((item) => item.type === "bun");
+    const mains = data.filter((item) => item.type === "main");
+    const sauces = data.filter((item) => item.type === "sauce");
 
-    const [current, setCurrent] = useState('bun');
-    const ingredientsGroups = [props.data.filter((el) => el.type == "bun"), props.data.filter((el) => el.type == "sauce"), props.data.filter((el) => el.type == "main")];
-    const dataOfGroups = [["bun", "Булки"], ["sauce", "Соусы"], ["main", "Начинки"]];
-    
-    const [ingredientOpen, setingredientOpen] = useState(null);
+    return [buns, mains, sauces];
+  }, [data]);
 
-    const handlerTabClick = (tab) => {
-        setCurrent(tab);
-        document.querySelector(`#${tab}`).scrollIntoView({ behavior: 'smooth' });
-    };
+  const dataOfGroups = [
+    ["bun", "Булки"],
+    ["sauce", "Соусы"],
+    ["main", "Начинки"],
+  ];
 
-    const closeIngredient = () => {
-        setingredientOpen(null);
-    };
+  const [ingredientOpen, setIngredientOpen] = useState(null);
 
-    return (
-        props.data.length &&
-        <>
-            <section className={burgerIngredientsStyles.ingredientsBox}>
-                <h1 className="text text_type_main-large mt-10 mb-10">Соберите бургер</h1>
-                <div className="mb-10" style={{ display: 'flex' }}>
-                    <Tab value="bun" active={current === 'bun'} onClick={handlerTabClick}>
-                        Булки
-                    </Tab>
-                    <Tab value="sauce" active={current === 'sauce'} onClick={handlerTabClick}>
-                        Соусы
-                    </Tab>
-                    <Tab value="main" active={current === 'main'} onClick={handlerTabClick}>
-                        Начинки
-                    </Tab>
-                </div>
-                <div className={burgerIngredientsStyles.ingredientsList}>
-                    {ingredientsGroups.map((group, index) => {
-                        return (
-                            <div className="pb-10">
-                                <h2 id={dataOfGroups[index][0]} className="text text_type_main-medium mb-6">{dataOfGroups[index][1]}</h2>
-                                <ul className={burgerIngredientsStyles.ul}>
-                                    {group.map((el) => {
-                                        return (
-                                            <li key={el._id}>
-                                                <div className={burgerIngredientsStyles.card} onClick={()=>{setingredientOpen(el)}}>
-                                                    <img src={el.image} className="ml-4 mr-4" />
-                                                    {el.count && <Counter count={el.count} size="default" />}
-                                                    <div className={`mt-1 mb-1 ${burgerIngredientsStyles.priceInfo}`}>
-                                                        <p className="text text_type_digits-default mr-2">{el.price}</p>
-                                                        <CurrencyIcon type="primary" />
-                                                    </div>
-                                                    <p className={`text text_type_main-default ${burgerIngredientsStyles.name}`}>{el.name}</p>
-                                                </div>
-                                            </li>
-                                        );
-                                    })}
-                                </ul>
-                            </div>)
-                    })}
-                </div >
-            </section >
-            {ingredientOpen && <Modal closeModal={closeIngredient} title="Детали ингредиента">
-                {/* <OrderDetails orderNumber="123456" /> */}
-                <IngredientDetails data={ingredientOpen} />
-            </Modal>}
-        </>
+  const handlerTabClick = (tab) => {
+    setCurrent(tab);
+    document.querySelector(`#${tab}`).scrollIntoView({ behavior: "smooth" });
+  };
+
+  const closeIngredient = () => {
+    setIngredientOpen(null);
+  };
+
+  const openIngredient = (data) => {
+    setIngredientOpen(data);
+  };
+
+  return (
+    data.length > 0 && (
+      <>
+        <section className={burgerIngredientsStyles.ingredientsBox}>
+          <h1 className="text text_type_main-large mt-10 mb-10">
+            Соберите бургер
+          </h1>
+          <div className={`mb-10 ${burgerIngredientsStyles.tabsPanel}`}>
+            {dataOfGroups.map((group) => {
+              return (
+                <Tab
+                  value={group[0]}
+                  active={current === group[0]}
+                  onClick={handlerTabClick}
+                >
+                  {group[1]}
+                </Tab>
+              );
+            })}
+          </div>
+          <div className={burgerIngredientsStyles.ingredientsList}>
+            {ingredientsGroups.map((group, index) => {
+              return (
+                <IngredientsCategory
+                  categoryId={dataOfGroups[index][0]}
+                  categoryName={dataOfGroups[index][1]}
+                  group={group}
+                  onCardClick={openIngredient}
+                />
+              );
+            })}
+          </div>
+        </section>
+        {ingredientOpen && (
+          <Modal closeModal={closeIngredient} title="Детали ингредиента">
+            <IngredientDetails data={ingredientOpen} />
+          </Modal>
+        )}
+      </>
     )
-}
+  );
+};
 
 BurgerIngredients.propTypes = {
-    data: PropTypes.arrayOf(ingredientType.isRequired).isRequired
+  data: PropTypes.arrayOf(ingredientType).isRequired,
 };

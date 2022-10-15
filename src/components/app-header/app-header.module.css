@@ -4,7 +4,7 @@
     position: relative;
 }
 
- .nav {
+.nav {
     display: flex;
     justify-content: space-between;
     max-width: 1280px;
@@ -22,4 +22,6 @@
 .link {
     display: flex;
     flex-direction: row;
+    text-decoration: none;
+    color: inherit;
 }

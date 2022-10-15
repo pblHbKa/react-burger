@@ -23,6 +23,20 @@
     max-height: 550px;
 }
 
+.ul::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ul::-webkit-scrollbar-track {
+    background: #2F2F37;
+}
+
+.ul::-webkit-scrollbar-thumb {
+    background-color: #8585AD;
+    border-radius: 20px;
+    border: solid #2F2F37;
+}
+
 .li {
     margin-bottom: 16px;
     display: flex;
