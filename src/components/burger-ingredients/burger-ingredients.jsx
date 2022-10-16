@@ -49,7 +49,7 @@ export const BurgerIngredients = ({ data }) => {
           <div className={`mb-10 ${burgerIngredientsStyles.tabsPanel}`}>
             {dataOfGroups.map((group) => {
               return (
-                <Tab
+                <Tab key={group[0]}
                   value={group[0]}
                   active={current === group[0]}
                   onClick={handlerTabClick}
@@ -67,6 +67,7 @@ export const BurgerIngredients = ({ data }) => {
                   categoryName={dataOfGroups[index][1]}
                   group={group}
                   onCardClick={openIngredient}
+                  key={dataOfGroups[index][0]}
                 />
               );
             })}

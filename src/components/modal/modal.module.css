@@ -9,10 +9,11 @@
     background-color: #1C1C21;
     position: absolute;
     top: 10%;
-    left: 30%;
+    left: 0;
+    right: 0;
     width: 720px;
+    margin: 0 auto;
     min-height: 539px;
-    margin: auto;
     border-radius: 40px;
     cursor: default;
     z-index: 999;

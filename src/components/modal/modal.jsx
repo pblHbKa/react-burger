@@ -8,10 +8,6 @@ import { ModalOverlay } from "../modal-overlay/modal-overlay";
 const modalRoot = document.getElementById("root");
 
 const Modal = ({ closeModal, title, children }) => {
-  const handlerOnClick = (e) => {
-    e.target.classList.contains("overlay") && closeModal();
-  };
-
   useEffect(() => {
     const onKeydown = (ev) => {
       ev.key === "Escape" && closeModal();
@@ -38,7 +34,7 @@ const Modal = ({ closeModal, title, children }) => {
         </div>
         <div className={modalStyles.details}>{children}</div>
       </div>
-      <ModalOverlay onClick={handlerOnClick} />
+      <ModalOverlay onClick={closeModal} />
     </>,
     modalRoot
   );

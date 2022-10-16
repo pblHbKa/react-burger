@@ -17,10 +17,9 @@
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
-    max-height: 656px;
     scrollbar-color: #8585AD #2F2F37;
     scrollbar-width: thin;
-    max-height: 550px;
+    max-height: 400px;
 }
 
 .ul::-webkit-scrollbar {
@@ -37,7 +36,7 @@
     border: solid #2F2F37;
 }
 
-.li {
+.constructorElement {
     margin-bottom: 16px;
     display: flex;
     flex-direction: row;
@@ -47,4 +46,8 @@
 
 .constructorBox {
     max-width: 600px;
+}
+
+.totalPrice {
+    margin-right: 9px;
 }
