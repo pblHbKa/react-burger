@@ -20,13 +20,17 @@ export const BurgerConstructor = () => {
   };
   const [data, setData] = useContext(BurgerContext);
   let totalPrice = data.reduce((prev, el) => prev + el.price, 0);
-  
+
   const placeOrder = () => {
-    const ingredientsId = data.map(el => el._id);
+    const ingredientsId = data.map((el) => el._id);
     createOrder(ingredientsId)
-    .then((res) => {setOrderNumber(res.order.number);})
-    .catch(err => {console.log(err)});
-  }
+      .then((res) => {
+        setOrderNumber(res.order.number);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const ingredientsGroup = useMemo(() => {
     const bun = data.filter((ingredient) => ingredient.type === "bun")[0];
@@ -98,7 +102,7 @@ export const BurgerConstructor = () => {
             </div>
           </div>
         </section>
-        {orderNumber && (
+        {orderNumber != 0 && (
           <Modal closeModal={closeOrderInfo}>
             <OrderDetails orderNumber={orderNumber} />
           </Modal>

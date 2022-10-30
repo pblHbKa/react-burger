@@ -20,7 +20,6 @@ function App() {
   }, []);
 
   return (
-    <>
       <BurgerContext.Provider value={[ingredients, setIngredients]}>
         <AppHeader />
         <main className={appStyles.main}>
@@ -28,7 +27,6 @@ function App() {
           <BurgerConstructor/>
         </main>
       </BurgerContext.Provider>
-    </>
   );
 }
 
