@@ -4,23 +4,30 @@ import { AppHeader } from "../app-header/app-header";
 import { BurgerConstructor } from "../burger-constructor/burger-constructor";
 import { BurgerIngredients } from "../burger-ingredients/burger-ingredients";
 import { getIngredients } from "../../utils/burger-api";
+import { BurgerContext } from "../../services/app-context";
 
 function App() {
   const [ingredients, setIngredients] = useState([]);
-
+  
   useEffect(() => {
     getIngredients()
-    .then(res => {setIngredients(res.data)})
-    .catch(err => {console.log(err)});
+      .then((res) => {
+        setIngredients(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   return (
     <>
-      <AppHeader />
-      <main className={appStyles.main}>
-        <BurgerIngredients data={ingredients} />
-        <BurgerConstructor data={ingredients} />
-      </main>
+      <BurgerContext.Provider value={[ingredients, setIngredients]}>
+        <AppHeader />
+        <main className={appStyles.main}>
+          <BurgerIngredients/>
+          <BurgerConstructor/>
+        </main>
+      </BurgerContext.Provider>
     </>
   );
 }
