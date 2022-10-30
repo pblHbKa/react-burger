@@ -14,7 +14,7 @@ export const IngredientCard = ({ onCardClick, ingredient }) => {
         onCardClick(ingredient);
       }}
     >
-      <img src={ingredient.image} className="ml-4 mr-4" />
+      <img src={ingredient.image} className="ml-4 mr-4" alt={ingredient.name}/>
       {ingredient.count && <Counter count={ingredient.count} size="default" />}
       <div className={`mt-1 mb-1 ${IngredientCardStyles.priceInfo}`}>
         <p className="text text_type_digits-default mr-2">{ingredient.price}</p>
