@@ -21,8 +21,14 @@ export const BurgerConstructor = () => {
   const [data, setData] = useContext(BurgerContext);
   let totalPrice = data.reduce((prev, el) => prev + el.price, 0);
 
+  const ingredientsGroup = useMemo(() => {
+    const bun = data.filter((ingredient) => ingredient.type === "bun")[0];
+    const ingredients = data.filter((ingredient) => ingredient.type !== "bun");
+    return { bun, ingredients };
+  }, [data]);
+
   const placeOrder = () => {
-    const ingredientsId = data.map((el) => el._id);
+    const ingredientsId =  [ingredientsGroup.bun._id,...ingredientsGroup.ingredients.map((el) => el._id), ingredientsGroup.bun._id];
     createOrder(ingredientsId)
       .then((res) => {
         setOrderNumber(res.order.number);
@@ -31,12 +37,6 @@ export const BurgerConstructor = () => {
         console.log(err);
       });
   };
-
-  const ingredientsGroup = useMemo(() => {
-    const bun = data.filter((ingredient) => ingredient.type === "bun")[0];
-    const ingredients = data.filter((ingredient) => ingredient.type !== "bun");
-    return { bun: bun, ingredients: ingredients };
-  }, [data]);
 
   return (
     data.length > 0 && (
