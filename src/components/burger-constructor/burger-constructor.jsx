@@ -1,4 +1,4 @@
-import { React, useMemo, useState } from "react";
+import { React, useMemo, useState, useContext } from "react";
 import burgerConstructorStyles from "./burger-constructor.module.css";
 import {
   ConstructorElement,
@@ -10,18 +10,33 @@ import PropTypes from "prop-types";
 import { ingredientType } from "../../utils/common";
 import { Modal } from "../modal/modal";
 import { OrderDetails } from "../order-details/order-details";
+import { BurgerContext } from "../../services/app-context";
+import { createOrder } from "../../utils/burger-api";
 
-export const BurgerConstructor = ({ data }) => {
-  const [isOrderSend, setOrderSend] = useState(false);
+export const BurgerConstructor = () => {
+  const [orderNumber, setOrderNumber] = useState(false);
   const closeOrderInfo = () => {
-    setOrderSend(false);
+    setOrderNumber(0);
   };
+  const [data, setData] = useContext(BurgerContext);
+  let totalPrice = data.reduce((prev, el) => prev + el.price, 0);
 
   const ingredientsGroup = useMemo(() => {
-    const bun = data.filter((ingredient) => ingredient.type === "bun");
+    const bun = data.filter((ingredient) => ingredient.type === "bun")[0];
     const ingredients = data.filter((ingredient) => ingredient.type !== "bun");
-    return { bun: bun, ingredients: ingredients };
+    return { bun, ingredients };
   }, [data]);
+
+  const placeOrder = () => {
+    const ingredientsId =  [ingredientsGroup.bun._id,...ingredientsGroup.ingredients.map((el) => el._id), ingredientsGroup.bun._id];
+    createOrder(ingredientsId)
+      .then((res) => {
+        setOrderNumber(res.order.number);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     data.length > 0 && (
@@ -30,14 +45,14 @@ export const BurgerConstructor = ({ data }) => {
           <div className="pl-10 pr-10 pt-25 mb-10 ml-40">
             <div
               className={`ml-8 ${burgerConstructorStyles.constructorElement}`}
-              key={ingredientsGroup.bun[0]._id}
+              key={`${ingredientsGroup.bun._id}_top`}
             >
               <ConstructorElement
                 type="top"
                 isLocked={true}
-                text={ingredientsGroup.bun[0].name}
-                price={ingredientsGroup.bun[0].price}
-                thumbnail={ingredientsGroup.bun[0].image}
+                text={`${ingredientsGroup.bun.name} верх`}
+                price={ingredientsGroup.bun.price}
+                thumbnail={ingredientsGroup.bun.image}
               />
             </div>
             <ul className={burgerConstructorStyles.ul}>
@@ -56,13 +71,13 @@ export const BurgerConstructor = ({ data }) => {
                 );
               })}
             </ul>
-            <div className="ml-8" key={ingredientsGroup.bun[1]._id}>
+            <div className="ml-8" key={`${ingredientsGroup.bun._id}_bottom`}>
               <ConstructorElement
                 type="bottom"
                 isLocked={true}
-                text={ingredientsGroup.bun[1].name}
-                price={ingredientsGroup.bun[1].price}
-                thumbnail={ingredientsGroup.bun[1].image}
+                text={`${ingredientsGroup.bun.name} низ`}
+                price={ingredientsGroup.bun.price}
+                thumbnail={ingredientsGroup.bun.image}
               />
             </div>
             <div className={`mt-10 ${burgerConstructorStyles.order}`}>
@@ -70,7 +85,7 @@ export const BurgerConstructor = ({ data }) => {
                 <p
                   className={`text text_type_digits-medium ${burgerConstructorStyles.totalPrice}`}
                 >
-                  610
+                  {totalPrice}
                 </p>
                 <CurrencyIcon type="primary" />
               </div>
@@ -79,7 +94,7 @@ export const BurgerConstructor = ({ data }) => {
                 type="primary"
                 size="large"
                 onClick={() => {
-                  setOrderSend(true);
+                  placeOrder();
                 }}
               >
                 Оформить заказ
@@ -87,16 +102,12 @@ export const BurgerConstructor = ({ data }) => {
             </div>
           </div>
         </section>
-        {isOrderSend && (
+        {orderNumber != 0 && (
           <Modal closeModal={closeOrderInfo}>
-            <OrderDetails orderNumber="123456" />
+            <OrderDetails orderNumber={orderNumber} />
           </Modal>
         )}
       </>
     )
   );
-};
-
-BurgerConstructor.propTypes = {
-  data: PropTypes.arrayOf(ingredientType).isRequired,
 };

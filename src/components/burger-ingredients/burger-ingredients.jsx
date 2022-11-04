@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useContext } from "react";
 import burgerIngredientsStyles from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
@@ -6,8 +6,11 @@ import { ingredientType } from "../../utils/common";
 import { Modal } from "../modal/modal";
 import { IngredientDetails } from "../ingredient-details/ingredient-details";
 import { IngredientsCategory } from "../ingredients-category/ingredients-category";
+import { BurgerContext } from "../../services/app-context";
 
-export const BurgerIngredients = ({ data }) => {
+export const BurgerIngredients = () => {
+  const [data, setData] = useContext(BurgerContext);
+
   const [current, setCurrent] = useState("bun");
 
   const ingredientsGroups = useMemo(() => {
@@ -81,8 +84,4 @@ export const BurgerIngredients = ({ data }) => {
       </>
     )
   );
-};
-
-BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(ingredientType).isRequired,
 };
