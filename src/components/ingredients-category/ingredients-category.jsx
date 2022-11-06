@@ -1,4 +1,5 @@
 import ingredientsCategoryStyles from "./ingredients-category.module.css";
+import { forwardRef } from "react";
 import {
   Counter,
   CurrencyIcon,
@@ -7,13 +8,13 @@ import PropTypes from "prop-types";
 import { ingredientType } from "../../utils/common";
 import { IngredientCard } from "../ingredient-card/ingredient-card";
 
-export const IngredientsCategory = ({categoryId, categoryName, group, onCardClick}) => {
+export const IngredientsCategory = forwardRef(({categoryId, categoryName, group, onCardClick}, ref) => (  
 
-    return (
         <div className="pb-10">
           <h2
             id={categoryId}
             className="text text_type_main-medium mb-6"
+            ref={ref}
           >
             {categoryName}
           </h2>
@@ -27,8 +28,7 @@ export const IngredientsCategory = ({categoryId, categoryName, group, onCardClic
             })}
           </ul>
         </div>
-      )
-}
+      ));
 
 IngredientsCategory.propTypes = {
     categoryId: PropTypes.string.isRequired,

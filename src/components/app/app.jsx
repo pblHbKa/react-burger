@@ -1,18 +1,19 @@
-import { React, useEffect, useState } from "react";
+import { React, useEffect } from "react";
 import appStyles from "./app.module.css";
 import { AppHeader } from "../app-header/app-header";
 import { BurgerConstructor } from "../burger-constructor/burger-constructor";
 import { BurgerIngredients } from "../burger-ingredients/burger-ingredients";
 import { getIngredients } from "../../utils/burger-api";
-import { BurgerContext } from "../../services/app-context";
+import { useDispatch } from "react-redux";
+import { setIngredients } from "../../services/reduces/burger-ingredients";
 
 function App() {
-  const [ingredients, setIngredients] = useState([]);
-  
+  const dispatch = useDispatch();
+
   useEffect(() => {
     getIngredients()
       .then((res) => {
-        setIngredients(res.data);
+        dispatch(setIngredients(res.data));
       })
       .catch((err) => {
         console.log(err);
@@ -20,13 +21,13 @@ function App() {
   }, []);
 
   return (
-      <BurgerContext.Provider value={[ingredients, setIngredients]}>
-        <AppHeader />
-        <main className={appStyles.main}>
-          <BurgerIngredients/>
-          <BurgerConstructor/>
-        </main>
-      </BurgerContext.Provider>
+    <>
+      <AppHeader />
+      <main className={appStyles.main}>
+        <BurgerIngredients />
+        <BurgerConstructor />
+      </main>
+    </>
   );
 }
 

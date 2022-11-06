@@ -6,19 +6,20 @@ import {
   Button,
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
-import { ingredientType } from "../../utils/common";
 import { Modal } from "../modal/modal";
 import { OrderDetails } from "../order-details/order-details";
-import { BurgerContext } from "../../services/app-context";
 import { createOrder } from "../../utils/burger-api";
+import { useDispatch, useSelector } from "react-redux";
+import { setOrder } from "../../services/reduces/order";
+import { setData } from "../../services/reduces/burger-constructor";
 
 export const BurgerConstructor = () => {
-  const [orderNumber, setOrderNumber] = useState(false);
+  const orderNumber = useSelector(state => state.order.number);
+
   const closeOrderInfo = () => {
-    setOrderNumber(0);
+    setOrder(0);
   };
-  const [data, setData] = useContext(BurgerContext);
+  const data = useSelector(state => state.burgerConstructor.data);
   let totalPrice = data.reduce((prev, el) => prev + el.price, 0);
 
   const ingredientsGroup = useMemo(() => {
@@ -31,7 +32,7 @@ export const BurgerConstructor = () => {
     const ingredientsId =  [ingredientsGroup.bun._id,...ingredientsGroup.ingredients.map((el) => el._id), ingredientsGroup.bun._id];
     createOrder(ingredientsId)
       .then((res) => {
-        setOrderNumber(res.order.number);
+        setOrder(res.order.number);
       })
       .catch((err) => {
         console.log(err);
