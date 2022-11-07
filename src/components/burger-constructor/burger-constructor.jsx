@@ -1,4 +1,4 @@
-import { React, useMemo, useState, useContext } from "react";
+import { React, useMemo, useState, useContext, useEffect } from "react";
 import burgerConstructorStyles from "./burger-constructor.module.css";
 import {
   ConstructorElement,
@@ -11,16 +11,31 @@ import { OrderDetails } from "../order-details/order-details";
 import { createOrder } from "../../utils/burger-api";
 import { useDispatch, useSelector } from "react-redux";
 import { setOrder } from "../../services/reduces/order";
-import { setData } from "../../services/reduces/burger-constructor";
+import {
+  addIngredient,
+  deleteIngredient,
+  setData,
+} from "../../services/reduces/burger-constructor";
+import { useDrop } from "react-dnd/dist/hooks/useDrop";
+import {
+  decreaseCount,
+  increaseCount,
+  bunChange
+} from "../../services/reduces/burger-ingredients";
+import { data as constructorData } from "../../utils/data";
 
 export const BurgerConstructor = () => {
-  const orderNumber = useSelector(state => state.order.number);
+  const dispatch = useDispatch();
+
+  const orderNumber = useSelector((state) => state.order.number);
 
   const closeOrderInfo = () => {
     setOrder(0);
   };
-  const data = useSelector(state => state.burgerConstructor.data);
-  let totalPrice = data.reduce((prev, el) => prev + el.price, 0);
+  const data = useSelector((state) => state.burgerConstructor.data);
+  let totalPrice = useMemo(() =>{
+    return data.reduce((prev, el) => prev + el.price * (el.type === "bun" ? 2 : 1), 0);
+  }, [data]);
 
   const ingredientsGroup = useMemo(() => {
     const bun = data.filter((ingredient) => ingredient.type === "bun")[0];
@@ -29,7 +44,11 @@ export const BurgerConstructor = () => {
   }, [data]);
 
   const placeOrder = () => {
-    const ingredientsId =  [ingredientsGroup.bun._id,...ingredientsGroup.ingredients.map((el) => el._id), ingredientsGroup.bun._id];
+    const ingredientsId = [
+      ingredientsGroup.bun._id,
+      ...ingredientsGroup.ingredients.map((el) => el._id),
+      ingredientsGroup.bun._id,
+    ];
     createOrder(ingredientsId)
       .then((res) => {
         setOrder(res.order.number);
@@ -39,10 +58,29 @@ export const BurgerConstructor = () => {
       });
   };
 
+  const [, dropTarget] = useDrop({
+    accept: "ingredient",
+    drop(item) {
+      dispatch(addIngredient(item));
+      dispatch(increaseCount(item._id));
+      if (item.type === "bun") {
+        dispatch(bunChange(item._id));
+      }
+    },
+  });
+
+  const delIngredient = (el) => {
+    dispatch(deleteIngredient(el.uuid));
+    dispatch(decreaseCount(el._id));
+  };
+
   return (
-    data.length > 0 && (
       <>
-        <section className={burgerConstructorStyles.constructorBox}>
+        <section
+          className={burgerConstructorStyles.constructorBox}
+          ref={dropTarget}
+        >
+          {data.length > 0 && (
           <div className="pl-10 pr-10 pt-25 mb-10 ml-40">
             <div
               className={`ml-8 ${burgerConstructorStyles.constructorElement}`}
@@ -59,13 +97,16 @@ export const BurgerConstructor = () => {
             <ul className={burgerConstructorStyles.ul}>
               {ingredientsGroup.ingredients.map((el) => {
                 return (
-                  <li key={el._id}>
+                  <li key={el.uuid}>
                     <div className={burgerConstructorStyles.constructorElement}>
                       <DragIcon type={"primary"} />
                       <ConstructorElement
                         text={el.name}
                         price={el.price}
                         thumbnail={el.image}
+                        handleClose={() => {
+                          delIngredient(el);
+                        }}
                       />
                     </div>
                   </li>
@@ -102,6 +143,7 @@ export const BurgerConstructor = () => {
               </Button>
             </div>
           </div>
+          )}
         </section>
         {orderNumber != 0 && (
           <Modal closeModal={closeOrderInfo}>
@@ -109,6 +151,5 @@ export const BurgerConstructor = () => {
           </Modal>
         )}
       </>
-    )
   );
 };

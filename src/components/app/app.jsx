@@ -6,6 +6,11 @@ import { BurgerIngredients } from "../burger-ingredients/burger-ingredients";
 import { getIngredients } from "../../utils/burger-api";
 import { useDispatch } from "react-redux";
 import { setIngredients } from "../../services/reduces/burger-ingredients";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { setData } from "../../services/reduces/burger-constructor";
+import { increaseCount } from "../../services/reduces/burger-ingredients";
+import { data } from "../../utils/data";
 
 function App() {
   const dispatch = useDispatch();
@@ -14,18 +19,27 @@ function App() {
     getIngredients()
       .then((res) => {
         dispatch(setIngredients(res.data));
+        dispatch(setData(data));
+        data.forEach(item => {dispatch(increaseCount(item._id)); console.log(item)});
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
 
+  // useEffect(() => {
+  //   dispatch(setData(data));
+  //   data.forEach(item => {dispatch(increaseCount(item._id)); console.log(item)});
+  // }, []);
+
   return (
     <>
       <AppHeader />
       <main className={appStyles.main}>
-        <BurgerIngredients />
-        <BurgerConstructor />
+        <DndProvider backend={HTML5Backend}>
+          <BurgerIngredients />
+          <BurgerConstructor />
+        </DndProvider>
       </main>
     </>
   );

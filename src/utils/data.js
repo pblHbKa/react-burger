@@ -1,7 +1,7 @@
 export const data = [
     {
      "_id":"60666c42cc7b410027a1a9b1",
-     "name":"111Краторная булка N-200i",
+     "name":"Краторная булка N-200i",
      "type":"bun",
      "proteins":80,
      "fat":24,

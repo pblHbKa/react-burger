@@ -24,13 +24,10 @@ export const BurgerIngredients = () => {
 
   useEffect(() => {
     if (inViewBuns) {
-      console.log("bun");
       setCurrent("bun");
     } else if (inViewSauces) {
-      console.log("sauce");
       setCurrent("sauce");
     } else if (inViewFilling) {
-      console.log("main");
       setCurrent("main");
     }
   }, [inViewBuns, inViewSauces, inViewFilling]);
