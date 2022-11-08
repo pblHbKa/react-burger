@@ -13,16 +13,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { setOrder } from "../../services/reduces/order";
 import {
   addIngredient,
-  deleteIngredient,
   setData,
 } from "../../services/reduces/burger-constructor";
 import { useDrop } from "react-dnd/dist/hooks/useDrop";
 import {
-  decreaseCount,
   increaseCount,
   bunChange
 } from "../../services/reduces/burger-ingredients";
 import { data as constructorData } from "../../utils/data";
+import { ConstructorCard } from "../constructor-card/constructor-card";
 
 export const BurgerConstructor = () => {
   const dispatch = useDispatch();
@@ -30,7 +29,7 @@ export const BurgerConstructor = () => {
   const orderNumber = useSelector((state) => state.order.number);
 
   const closeOrderInfo = () => {
-    setOrder(0);
+    dispatch(setOrder(0));
   };
   const data = useSelector((state) => state.burgerConstructor.data);
   let totalPrice = useMemo(() =>{
@@ -47,11 +46,11 @@ export const BurgerConstructor = () => {
     const ingredientsId = [
       ingredientsGroup.bun._id,
       ...ingredientsGroup.ingredients.map((el) => el._id),
-      ingredientsGroup.bun._id,
+      ingredientsGroup.bun._id
     ];
     createOrder(ingredientsId)
       .then((res) => {
-        setOrder(res.order.number);
+        dispatch(setOrder(res.order.number));
       })
       .catch((err) => {
         console.log(err);
@@ -69,10 +68,6 @@ export const BurgerConstructor = () => {
     },
   });
 
-  const delIngredient = (el) => {
-    dispatch(deleteIngredient(el.uuid));
-    dispatch(decreaseCount(el._id));
-  };
 
   return (
       <>
@@ -98,17 +93,10 @@ export const BurgerConstructor = () => {
               {ingredientsGroup.ingredients.map((el) => {
                 return (
                   <li key={el.uuid}>
-                    <div className={burgerConstructorStyles.constructorElement}>
-                      <DragIcon type={"primary"} />
-                      <ConstructorElement
-                        text={el.name}
-                        price={el.price}
-                        thumbnail={el.image}
-                        handleClose={() => {
-                          delIngredient(el);
-                        }}
-                      />
-                    </div>
+                    <ConstructorCard 
+                    type={"primary"} 
+                    el={el}
+                    />
                   </li>
                 );
               })}

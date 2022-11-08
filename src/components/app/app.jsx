@@ -20,7 +20,7 @@ function App() {
       .then((res) => {
         dispatch(setIngredients(res.data));
         dispatch(setData(data));
-        data.forEach(item => {dispatch(increaseCount(item._id)); console.log(item)});
+        data.forEach(item => {dispatch(increaseCount(item._id))});
       })
       .catch((err) => {
         console.log(err);
