@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { BurgerIngredients } from "../../components/burger-ingredients/burger-ingredients";
 
 const initialState = {
   data: [],

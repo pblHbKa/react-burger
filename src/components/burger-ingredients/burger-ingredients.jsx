@@ -4,11 +4,18 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Modal } from "../modal/modal";
 import { IngredientDetails } from "../ingredient-details/ingredient-details";
 import { IngredientsCategory } from "../ingredients-category/ingredients-category";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useInView } from "react-intersection-observer";
+import { getIngredients } from "../../services/actions/burger-ingredients";
+import { setIngredientOpen } from "../../services/reduces/ingredient-open";
 
 export const BurgerIngredients = () => {
   const data = useSelector((state) => state.burgerIngredients.data);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getIngredients());
+  }, []);
 
   const [current, setCurrent] = useState("bun");
   const [bunsRef, inViewBuns] = useInView({
@@ -55,7 +62,7 @@ export const BurgerIngredients = () => {
     ["main", "Начинки"],
   ];
 
-  const [ingredientOpen, setIngredientOpen] = useState(null);
+  const ingredientOpen = useSelector((state) => state.ingredientOpen.ingredient);
 
   const handlerTabClick = (tab) => {
     setCurrent(tab);
@@ -63,11 +70,11 @@ export const BurgerIngredients = () => {
   };
 
   const closeIngredient = () => {
-    setIngredientOpen(null);
+    dispatch(setIngredientOpen(null));
   };
 
   const openIngredient = (data) => {
-    setIngredientOpen(data);
+    dispatch(setIngredientOpen(data));
   };
 
   return (

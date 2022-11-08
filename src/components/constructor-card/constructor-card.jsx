@@ -37,14 +37,15 @@ export const ConstructorCard = ({type, el}) => {
             return;
           }
           const hoverBoundingRect = ref.current?.getBoundingClientRect();
-          const hoverMiddleY =
+          const hoverY =
             (hoverBoundingRect.bottom - hoverBoundingRect.top) / 4;
           const clientOffset = monitor.getClientOffset();
-          const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-          if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+          const hoverClientTopY = clientOffset.y - hoverBoundingRect.top;
+          const hoverClientBottomY = hoverBoundingRect.bottom - clientOffset.y;
+          if (dragIndex < hoverIndex && hoverClientTopY < hoverY) {
             return;
           }
-          if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+          if (dragIndex > hoverIndex && hoverClientBottomY > hoverY) {
             return;
           }
           dispatch(moveIngredient({dragIndex, hoverIndex, item}));

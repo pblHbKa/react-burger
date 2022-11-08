@@ -5,7 +5,8 @@ import App from "./components/app/app";
 import { compose, createStore, applyMiddleware } from "redux";
 import { rootReducer } from "./services/reduces";
 import { Provider } from "react-redux/es/exports";
-import { configureStore} from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
+import thunk from "redux-thunk";
 
 const composeEnhancers =
   typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -14,8 +15,10 @@ const composeEnhancers =
 const enhancer = composeEnhancers();
 
 const store = new configureStore({
-    reducer: rootReducer
-}, enhancer);
+  reducer: rootReducer,
+  enhancer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
+});
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
