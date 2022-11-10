@@ -51,3 +51,10 @@
 .totalPrice {
     margin-right: 9px;
 }
+
+.initialTextBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}

@@ -32,9 +32,14 @@ const burgerIngredients = createSlice({
         }
       });
     },
+    resetCount: (state, action) => {
+      state.data.forEach((item) => {
+        item.count = 0;
+      });
+    },
   },
 });
 
 export const { reducer } = burgerIngredients;
-export const { setIngredients, increaseCount, decreaseCount, bunChange } =
+export const { setIngredients, increaseCount, decreaseCount, bunChange, resetCount } =
   burgerIngredients.actions;

@@ -8,7 +8,6 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Modal } from "../modal/modal";
 import { OrderDetails } from "../order-details/order-details";
-import { createOrder } from "../../utils/burger-api";
 import { useDispatch, useSelector } from "react-redux";
 import { setOrder } from "../../services/reduces/order";
 import {
@@ -18,10 +17,10 @@ import {
 import { useDrop } from "react-dnd/dist/hooks/useDrop";
 import {
   increaseCount,
-  bunChange
+  bunChange,
 } from "../../services/reduces/burger-ingredients";
-import { data as constructorData } from "../../utils/data";
 import { ConstructorCard } from "../constructor-card/constructor-card";
+import { createOrder } from "../../services/actions/burger-constructor"
 
 export const BurgerConstructor = () => {
   const dispatch = useDispatch();
@@ -29,15 +28,19 @@ export const BurgerConstructor = () => {
   const orderNumber = useSelector((state) => state.order.number);
 
   const closeOrderInfo = () => {
-    dispatch(setOrder(0));
+    dispatch(setOrder(null));
   };
   const data = useSelector((state) => state.burgerConstructor.data);
-  let totalPrice = useMemo(() =>{
-    return data.reduce((prev, el) => prev + el.price * (el.type === "bun" ? 2 : 1), 0);
+  const totalPrice = useMemo(() => {
+    return data.reduce(
+      (prev, el) => prev + el.price * (el.type === "bun" ? 2 : 1),
+      0
+    );
   }, [data]);
 
   const ingredientsGroup = useMemo(() => {
-    const bun = data.filter((ingredient) => ingredient.type === "bun")[0];
+    const buns = data.filter((ingredient) => ingredient.type === "bun");
+    const bun = buns.length ? buns[0] : null;
     const ingredients = data.filter((ingredient) => ingredient.type !== "bun");
     return { bun, ingredients };
   }, [data]);
@@ -46,15 +49,9 @@ export const BurgerConstructor = () => {
     const ingredientsId = [
       ingredientsGroup.bun._id,
       ...ingredientsGroup.ingredients.map((el) => el._id),
-      ingredientsGroup.bun._id
+      ingredientsGroup.bun._id,
     ];
-    createOrder(ingredientsId)
-      .then((res) => {
-        dispatch(setOrder(res.order.number));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    dispatch(createOrder(ingredientsId));
   };
 
   const [, dropTarget] = useDrop({
@@ -68,15 +65,15 @@ export const BurgerConstructor = () => {
     },
   });
 
-
   return (
-      <>
-        <section
-          className={burgerConstructorStyles.constructorBox}
-          ref={dropTarget}
-        >
-          {data.length > 0 && (
+    <>
+      <section
+        className={burgerConstructorStyles.constructorBox}
+        ref={dropTarget}
+      >
+        {data.length > 0 && (
           <div className="pl-10 pr-10 pt-25 mb-10 ml-40">
+            {ingredientsGroup.bun &&(
             <div
               className={`ml-8 ${burgerConstructorStyles.constructorElement}`}
               key={`${ingredientsGroup.bun._id}_top`}
@@ -88,19 +85,17 @@ export const BurgerConstructor = () => {
                 price={ingredientsGroup.bun.price}
                 thumbnail={ingredientsGroup.bun.image}
               />
-            </div>
+            </div>)}
             <ul className={burgerConstructorStyles.ul}>
               {ingredientsGroup.ingredients.map((el) => {
                 return (
                   <li key={el.uuid}>
-                    <ConstructorCard 
-                    type={"primary"} 
-                    el={el}
-                    />
+                    <ConstructorCard type={"primary"} el={el} />
                   </li>
                 );
               })}
             </ul>
+            {ingredientsGroup.bun &&(
             <div className="ml-8" key={`${ingredientsGroup.bun._id}_bottom`}>
               <ConstructorElement
                 type="bottom"
@@ -109,7 +104,7 @@ export const BurgerConstructor = () => {
                 price={ingredientsGroup.bun.price}
                 thumbnail={ingredientsGroup.bun.image}
               />
-            </div>
+            </div>)}
             <div className={`mt-10 ${burgerConstructorStyles.order}`}>
               <div className={`mr-10 ${burgerConstructorStyles.order}`}>
                 <p
@@ -119,7 +114,7 @@ export const BurgerConstructor = () => {
                 </p>
                 <CurrencyIcon type="primary" />
               </div>
-              <Button
+              {ingredientsGroup.bun && (<Button
                 htmlType="button"
                 type="primary"
                 size="large"
@@ -128,16 +123,23 @@ export const BurgerConstructor = () => {
                 }}
               >
                 Оформить заказ
-              </Button>
+              </Button>)}
             </div>
           </div>
-          )}
-        </section>
-        {orderNumber != 0 && (
-          <Modal closeModal={closeOrderInfo}>
-            <OrderDetails orderNumber={orderNumber} />
-          </Modal>
         )}
-      </>
+        {data.length === 0 && (
+          <div className= {burgerConstructorStyles.initialTextBox}>
+            <h2 className="text text_type_main-medium">
+              Перетащи сюда ингредиенты
+            </h2>
+          </div>
+        )}
+      </section>
+      {orderNumber && (
+        <Modal closeModal={closeOrderInfo}>
+          <OrderDetails orderNumber={orderNumber} />
+        </Modal>
+      )}
+    </>
   );
 };
