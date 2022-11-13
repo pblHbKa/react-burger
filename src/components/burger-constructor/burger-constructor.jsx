@@ -1,4 +1,4 @@
-import { React, useMemo, useState, useContext } from "react";
+import { React, useMemo, useState, useContext, useEffect } from "react";
 import burgerConstructorStyles from "./burger-constructor.module.css";
 import {
   ConstructorElement,
@@ -6,43 +6,74 @@ import {
   Button,
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
-import { ingredientType } from "../../utils/common";
 import { Modal } from "../modal/modal";
 import { OrderDetails } from "../order-details/order-details";
-import { BurgerContext } from "../../services/app-context";
-import { createOrder } from "../../utils/burger-api";
+import { useDispatch, useSelector } from "react-redux";
+import { setOrder } from "../../services/reduces/order";
+import {
+  addIngredient,
+  setData,
+} from "../../services/reduces/burger-constructor";
+import { useDrop } from "react-dnd/dist/hooks/useDrop";
+import {
+  increaseCount,
+  bunChange,
+} from "../../services/reduces/burger-ingredients";
+import { ConstructorCard } from "../constructor-card/constructor-card";
+import { createOrder } from "../../services/actions/burger-constructor"
 
 export const BurgerConstructor = () => {
-  const [orderNumber, setOrderNumber] = useState(false);
+  const dispatch = useDispatch();
+
+  const orderNumber = useSelector((state) => state.order.number);
+
   const closeOrderInfo = () => {
-    setOrderNumber(0);
+    dispatch(setOrder(null));
   };
-  const [data, setData] = useContext(BurgerContext);
-  let totalPrice = data.reduce((prev, el) => prev + el.price, 0);
+  const data = useSelector((state) => state.burgerConstructor.data);
+  const totalPrice = useMemo(() => {
+    return data.reduce(
+      (prev, el) => prev + el.price * (el.type === "bun" ? 2 : 1),
+      0
+    );
+  }, [data]);
 
   const ingredientsGroup = useMemo(() => {
-    const bun = data.filter((ingredient) => ingredient.type === "bun")[0];
+    const buns = data.filter((ingredient) => ingredient.type === "bun");
+    const bun = buns.length ? buns[0] : null;
     const ingredients = data.filter((ingredient) => ingredient.type !== "bun");
     return { bun, ingredients };
   }, [data]);
 
   const placeOrder = () => {
-    const ingredientsId =  [ingredientsGroup.bun._id,...ingredientsGroup.ingredients.map((el) => el._id), ingredientsGroup.bun._id];
-    createOrder(ingredientsId)
-      .then((res) => {
-        setOrderNumber(res.order.number);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const ingredientsId = [
+      ingredientsGroup.bun._id,
+      ...ingredientsGroup.ingredients.map((el) => el._id),
+      ingredientsGroup.bun._id,
+    ];
+    dispatch(createOrder(ingredientsId));
   };
 
+  const [, dropTarget] = useDrop({
+    accept: "ingredient",
+    drop(item) {
+      dispatch(addIngredient(item));
+      dispatch(increaseCount(item._id));
+      if (item.type === "bun") {
+        dispatch(bunChange(item._id));
+      }
+    },
+  });
+
   return (
-    data.length > 0 && (
-      <>
-        <section className={burgerConstructorStyles.constructorBox}>
+    <>
+      <section
+        className={burgerConstructorStyles.constructorBox}
+        ref={dropTarget}
+      >
+        {data.length > 0 && (
           <div className="pl-10 pr-10 pt-25 mb-10 ml-40">
+            {ingredientsGroup.bun &&(
             <div
               className={`ml-8 ${burgerConstructorStyles.constructorElement}`}
               key={`${ingredientsGroup.bun._id}_top`}
@@ -54,23 +85,17 @@ export const BurgerConstructor = () => {
                 price={ingredientsGroup.bun.price}
                 thumbnail={ingredientsGroup.bun.image}
               />
-            </div>
+            </div>)}
             <ul className={burgerConstructorStyles.ul}>
               {ingredientsGroup.ingredients.map((el) => {
                 return (
-                  <li key={el._id}>
-                    <div className={burgerConstructorStyles.constructorElement}>
-                      <DragIcon type={"primary"} />
-                      <ConstructorElement
-                        text={el.name}
-                        price={el.price}
-                        thumbnail={el.image}
-                      />
-                    </div>
+                  <li key={el.uuid}>
+                    <ConstructorCard type={"primary"} el={el} />
                   </li>
                 );
               })}
             </ul>
+            {ingredientsGroup.bun &&(
             <div className="ml-8" key={`${ingredientsGroup.bun._id}_bottom`}>
               <ConstructorElement
                 type="bottom"
@@ -79,7 +104,7 @@ export const BurgerConstructor = () => {
                 price={ingredientsGroup.bun.price}
                 thumbnail={ingredientsGroup.bun.image}
               />
-            </div>
+            </div>)}
             <div className={`mt-10 ${burgerConstructorStyles.order}`}>
               <div className={`mr-10 ${burgerConstructorStyles.order}`}>
                 <p
@@ -89,7 +114,7 @@ export const BurgerConstructor = () => {
                 </p>
                 <CurrencyIcon type="primary" />
               </div>
-              <Button
+              {ingredientsGroup.bun && (<Button
                 htmlType="button"
                 type="primary"
                 size="large"
@@ -98,16 +123,23 @@ export const BurgerConstructor = () => {
                 }}
               >
                 Оформить заказ
-              </Button>
+              </Button>)}
             </div>
           </div>
-        </section>
-        {orderNumber != 0 && (
-          <Modal closeModal={closeOrderInfo}>
-            <OrderDetails orderNumber={orderNumber} />
-          </Modal>
         )}
-      </>
-    )
+        {data.length === 0 && (
+          <div className= {burgerConstructorStyles.initialTextBox}>
+            <h2 className="text text_type_main-medium">
+              Перетащи сюда ингредиенты
+            </h2>
+          </div>
+        )}
+      </section>
+      {orderNumber && (
+        <Modal closeModal={closeOrderInfo}>
+          <OrderDetails orderNumber={orderNumber} />
+        </Modal>
+      )}
+    </>
   );
 };

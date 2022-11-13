@@ -1,20 +1,22 @@
 const BURGER_API_URL = "https://norma.nomoreparties.space/api";
 
-export function createOrder(ingredients) { 
-  return fetch(`${BURGER_API_URL}/orders`, {
-    method: 'POST',
+export function createOrder(ingredients) {
+  return request(`${BURGER_API_URL}/orders`, {
+    method: "POST",
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      Accept: "application/json",
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ingredients})
-    })
-    .then((res) => checkResponse(res))
-  }
+    body: JSON.stringify({ ingredients }),
+  })
+}
 
 export function getIngredients() {
-  return fetch(`${BURGER_API_URL}/ingredients`)
-    .then((res) => checkResponse(res))
+  return request(`${BURGER_API_URL}/ingredients`)
+}
+
+function request(url, options) {
+  return fetch(url, options).then(checkResponse);
 }
 
 const checkResponse = (res) => {

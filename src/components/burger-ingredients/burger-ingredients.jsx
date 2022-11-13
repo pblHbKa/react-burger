@@ -1,24 +1,59 @@
-import { useState, useMemo, useContext } from "react";
+import { useState, useMemo, useEffect } from "react";
 import burgerIngredientsStyles from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
-import { ingredientType } from "../../utils/common";
 import { Modal } from "../modal/modal";
 import { IngredientDetails } from "../ingredient-details/ingredient-details";
 import { IngredientsCategory } from "../ingredients-category/ingredients-category";
-import { BurgerContext } from "../../services/app-context";
+import { useDispatch, useSelector } from "react-redux";
+import { useInView } from "react-intersection-observer";
+import { getIngredients } from "../../services/actions/burger-ingredients";
+import { setIngredientOpen } from "../../services/reduces/ingredient-open";
 
 export const BurgerIngredients = () => {
-  const [data, setData] = useContext(BurgerContext);
+  const data = useSelector((state) => state.burgerIngredients.data);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getIngredients());
+  }, []);
 
   const [current, setCurrent] = useState("bun");
+  const [bunsRef, inViewBuns] = useInView({
+    threshold: 0,
+  });
+
+  const [mainsRef, inViewFilling] = useInView({
+    threshold: 0,
+  });
+  const [saucesRef, inViewSauces] = useInView({
+    threshold: 0,
+  });
+
+  useEffect(() => {
+    if (inViewBuns) {
+      setCurrent("bun");
+    } else if (inViewSauces) {
+      setCurrent("sauce");
+    } else if (inViewFilling) {
+      setCurrent("main");
+    }
+  }, [inViewBuns, inViewSauces, inViewFilling]);
 
   const ingredientsGroups = useMemo(() => {
-    const buns = data.filter((item) => item.type === "bun");
-    const mains = data.filter((item) => item.type === "main");
-    const sauces = data.filter((item) => item.type === "sauce");
+    const buns = {
+      data: data.filter((item) => item.type === "bun"),
+      ref: bunsRef,
+    };
+    const mains = {
+      data: data.filter((item) => item.type === "main"),
+      ref: mainsRef,
+    };
+    const sauces = {
+      data: data.filter((item) => item.type === "sauce"),
+      ref: saucesRef,
+    };
 
-    return [buns, mains, sauces];
+    return [buns, sauces, mains];
   }, [data]);
 
   const dataOfGroups = [
@@ -27,7 +62,7 @@ export const BurgerIngredients = () => {
     ["main", "Начинки"],
   ];
 
-  const [ingredientOpen, setIngredientOpen] = useState(null);
+  const ingredientOpen = useSelector((state) => state.ingredientOpen.ingredient);
 
   const handlerTabClick = (tab) => {
     setCurrent(tab);
@@ -35,11 +70,11 @@ export const BurgerIngredients = () => {
   };
 
   const closeIngredient = () => {
-    setIngredientOpen(null);
+    dispatch(setIngredientOpen(null));
   };
 
   const openIngredient = (data) => {
-    setIngredientOpen(data);
+    dispatch(setIngredientOpen(data));
   };
 
   return (
@@ -50,17 +85,17 @@ export const BurgerIngredients = () => {
             Соберите бургер
           </h1>
           <div className={`mb-10 ${burgerIngredientsStyles.tabsPanel}`}>
-            {dataOfGroups.map((group) => {
-              return (
-                <Tab key={group[0]}
-                  value={group[0]}
-                  active={current === group[0]}
-                  onClick={handlerTabClick}
-                >
-                  {group[1]}
-                </Tab>
-              );
-            })}
+            {dataOfGroups.map((group) => (
+              <Tab
+                key={group[0]}
+                value={group[0]}
+                active={current === group[0]}
+                onClick={handlerTabClick}
+                text={group[1]}
+              >
+                {group[1]}
+              </Tab>
+            ))}
           </div>
           <div className={burgerIngredientsStyles.ingredientsList}>
             {ingredientsGroups.map((group, index) => {
@@ -68,7 +103,8 @@ export const BurgerIngredients = () => {
                 <IngredientsCategory
                   categoryId={dataOfGroups[index][0]}
                   categoryName={dataOfGroups[index][1]}
-                  group={group}
+                  group={group.data}
+                  ref={group.ref}
                   onCardClick={openIngredient}
                   key={dataOfGroups[index][0]}
                 />
