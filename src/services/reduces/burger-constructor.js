@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 
 const initialState = {
   data: [],
+  isOrderLoad: false,
 };
 
 const burgerConstructor = createSlice({
@@ -40,9 +41,15 @@ const burgerConstructor = createSlice({
       newArr.splice(hoverIndex, 0, action.payload.item);
       state.data = newArr;
     },
+    startLoadOrder: (state, action) => {
+      state.isOrderLoad = true;
+    },
+    endLoadOrder: (state, action) => {
+      state.isOrderLoad = false;
+    }
   },
 });
 
 export const { reducer } = burgerConstructor;
-export const { setData, addIngredient, deleteIngredient, moveIngredient } =
+export const { setData, addIngredient, deleteIngredient, moveIngredient, startLoadOrder, endLoadOrder } =
   burgerConstructor.actions;

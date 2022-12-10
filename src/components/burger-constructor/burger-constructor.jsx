@@ -21,6 +21,7 @@ import {
 } from "../../services/reduces/burger-ingredients";
 import { ConstructorCard } from "../constructor-card/constructor-card";
 import { createOrder } from "../../services/actions/burger-constructor"
+import { Loader } from "../loader/loader";
 
 export const BurgerConstructor = () => {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ export const BurgerConstructor = () => {
     dispatch(setOrder(null));
   };
   const data = useSelector((state) => state.burgerConstructor.data);
+  const isOrderLoad = useSelector((state) => state.burgerConstructor.isOrderLoad);
   const totalPrice = useMemo(() => {
     return data.reduce(
       (prev, el) => prev + el.price * (el.type === "bun" ? 2 : 1),
@@ -67,7 +69,8 @@ export const BurgerConstructor = () => {
 
   return (
     <>
-      <section
+      {!isOrderLoad &&
+      (<section
         className={burgerConstructorStyles.constructorBox}
         ref={dropTarget}
       >
@@ -134,11 +137,16 @@ export const BurgerConstructor = () => {
             </h2>
           </div>
         )}
-      </section>
+      </section>)}
       {orderNumber && (
         <Modal closeModal={closeOrderInfo}>
           <OrderDetails orderNumber={orderNumber} />
         </Modal>
+      )}
+      {isOrderLoad && (
+        //<Modal closeModal={closeOrderInfo}>
+          <Loader/>
+        //</Modal>
       )}
     </>
   );
