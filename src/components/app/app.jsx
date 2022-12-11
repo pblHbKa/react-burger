@@ -5,6 +5,7 @@ import { LogIn } from "../../pages/login";
 import { ForgotPassword } from "../../pages/forgot-password";
 import { ResetPassword } from "../../pages/reset-password";
 import { Main } from "../../pages/main";
+import { Profile } from "../../pages/profile";
 
 function App() {
   return (
@@ -24,6 +25,9 @@ function App() {
         </Route>
         <Route path="/reset-password">
           <ResetPassword/>
+        </Route>
+        <Route path="/profile">
+          <Profile/>
         </Route>
         <Route path="*">
           <Error404 />

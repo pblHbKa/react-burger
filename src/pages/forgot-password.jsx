@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { Button, Input } from "@ya.praktikum/react-developer-burger-ui-components";
+import {
+  Button,
+  EmailInput,
+} from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link } from "react-router-dom";
 import { AppHeader } from "../components/app-header/app-header";
 import { resetPassword as resetPasswordAPI } from "../utils/burger-api";
@@ -28,8 +31,7 @@ export const ForgotPassword = () => {
       <AppHeader />
       <form className={userInStyles.userInform} onSubmit={resetPassword}>
         <h1 className="text text_type_main-medium">Восстановление пароля</h1>
-        <Input
-          type="email"
+        <EmailInput
           placeholder="E-mail"
           extraClass="mt-6 mb-6"
           name="email"
@@ -40,7 +42,10 @@ export const ForgotPassword = () => {
           Восстановить
         </Button>
         <p className="text text_type_main-default mt-20">
-          Вспомнили пароль? <Link to="/login" className={userInStyles.link}>Войти</Link>
+          Вспомнили пароль?{" "}
+          <Link to="/login" className={userInStyles.link}>
+            Войти
+          </Link>
         </p>
       </form>
     </>
