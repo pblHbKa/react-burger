@@ -37,7 +37,7 @@ export const ResetPassword = () => {
         <PasswordInput type="password" placeholder="Введите новый пароль" extraClass="mt-6" name="password" value={newPassword} onChange={handleChange}/>
         <Input type="text" placeholder="Введите код из письма" extraClass="mt-6 mb-6" name="verificationCode" value={verificationCode} onChange={handleChange}/>
         <Button htmlType="submit" type="primary" size="medium">Сохранить</Button>
-        <p className="text text_type_main-default mt-20">Вспомнили пароль? <Link to="/login">Войти</Link></p>
+        <p className="text text_type_main-default mt-20">Вспомнили пароль? <Link to="/login" className={userInStyles.link}>Войти</Link></p>
       </form>
     </>
   );

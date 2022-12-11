@@ -13,7 +13,7 @@ export const Registration = () => {
         <Input type="email" placeholder="E-mail" extraClass="mt-6 mb-6" name="email"/>
         <PasswordInput type="password" placeholder="Пароль" extraClass="mb-6" name="password"/>
         <Button htmlType="button" type="primary" size="medium">Зарегистрироваться</Button>
-        <p className="text text_type_main-default mt-20">Уже зарегистрированы? <Link to="/login">Войти</Link></p> 
+        <p className="text text_type_main-default mt-20">Уже зарегистрированы? <Link to="/login" className={userInStyles.link}>Войти</Link></p> 
       </form>
     </>
   );

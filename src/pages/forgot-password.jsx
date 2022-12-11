@@ -40,7 +40,7 @@ export const ForgotPassword = () => {
           Восстановить
         </Button>
         <p className="text text_type_main-default mt-20">
-          Вспомнили пароль? <Link to="/login">Войти</Link>
+          Вспомнили пароль? <Link to="/login" className={userInStyles.link}>Войти</Link>
         </p>
       </form>
     </>

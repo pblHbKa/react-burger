@@ -12,8 +12,8 @@ export const LogIn = () => {
         <Input type="email" placeholder="E-mail" extraClass="mt-6 mb-6" name="email"/>
         <PasswordInput type="password" placeholder="Пароль" extraClass="mb-6" name="password"/>
         <Button htmlType="button" type="primary" size="medium">Войти</Button>
-        <p className="text text_type_main-default mt-20">Вы — новый пользователь? <Link to="/register">Зарегистрироваться</Link></p> 
-        <p className="text text_type_main-default mt-4">Забыли пароль? <Link to="/forgot-password">Восстановить пароль</Link></p> 
+        <p className="text text_type_main-default mt-20">Вы — новый пользователь? <Link to="/register" className={userInStyles.link}>Зарегистрироваться</Link></p> 
+        <p className="text text_type_main-default mt-4">Забыли пароль? <Link to="/forgot-password" className={userInStyles.link}>Восстановить пароль</Link></p> 
       </form>
     </>
   );
