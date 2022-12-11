@@ -13,7 +13,7 @@ export const LogIn = () => {
         <PasswordInput type="password" placeholder="Пароль" extraClass="mb-6" name="password"/>
         <Button htmlType="button" type="primary" size="medium">Войти</Button>
         <p className="text text_type_main-default mt-20">Вы — новый пользователь? <Link to="/register">Зарегистрироваться</Link></p> 
-        <p className="text text_type_main-default mt-4">Забыли пароль? <Link>Восстановить пароль</Link></p> 
+        <p className="text text_type_main-default mt-4">Забыли пароль? <Link to="/forgot-password">Восстановить пароль</Link></p> 
       </form>
     </>
   );

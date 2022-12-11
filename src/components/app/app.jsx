@@ -9,6 +9,8 @@ import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 import { Error404 } from "../../pages/error404";
 import { Registration } from "../../pages/register";
 import { LogIn } from "../../pages/login";
+import { ForgotPassword } from "../../pages/forgot-password";
+import { ResetPassword } from "../../pages/reset-password";
 
 function App() {
   return (
@@ -28,6 +30,12 @@ function App() {
         </Route>
         <Route path="/login">
           <LogIn/>
+        </Route>
+        <Route path="/forgot-password">
+          <ForgotPassword/>
+        </Route>
+        <Route path="/reset-password">
+          <ResetPassword/>
         </Route>
         <Route path="*">
           <Error404 />
