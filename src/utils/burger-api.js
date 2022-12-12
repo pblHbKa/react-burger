@@ -37,7 +37,7 @@ export function setPassword(password, token) {
   })
 }
 
-export function newUser(email, password, name) {
+export function createUser(email, password, name) {
   return request(`${BURGER_API_URL}/auth/register`, {
     method: "POST",
     headers: {
@@ -45,6 +45,51 @@ export function newUser(email, password, name) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ email, password, name }),
+  })
+}
+
+export function authorization(email, password) {
+  return request(`${BURGER_API_URL}/auth/login`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, password }),
+  })
+}
+
+export function logout(token) {
+  return request(`${BURGER_API_URL}/auth/logout`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ token }),
+  })
+}
+
+export function updateToken(token) {
+  return request(`${BURGER_API_URL}/auth/token`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ token }),
+  })
+}
+
+export function getUserInfo(token) {
+  return request(`${BURGER_API_URL}/auth/user`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: 'Bearer ' + token
+    },
+    body: JSON.stringify({ token }),
   })
 }
 
