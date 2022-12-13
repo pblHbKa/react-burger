@@ -9,14 +9,13 @@ import { Profile } from "../../pages/profile";
 import { ProtectedRoute } from "../protectedRoute/protectedRoute";
 import { useState } from "react";
 import { Ingredient } from "../../pages/ingredient";
-import { data } from "../../utils/data";
+import { ProvideAuth } from "../../services/reduces/user";
 
 function App() {
 
-  const [user, setUser] = useState(null);
-
   return (
     <>
+    <ProvideAuth>
       <Switch>
         <Route path="/" exact>
           <Main />
@@ -33,16 +32,17 @@ function App() {
         <ProtectedRoute onlyUnAuth path="/reset-password">
           <ResetPassword />
         </ProtectedRoute>
-        <ProtectedRoute user={user} path="/profile">
+        <ProtectedRoute path="/profile">
           <Profile />
         </ProtectedRoute>
         <Route path="/ingredients/:idIngredient">
-          <Ingredient ingredients={data}/>
+          <Ingredient/>
         </Route>
         <Route path="*">
           <Error404 />
         </Route>
       </Switch>
+    </ProvideAuth>
     </>
   );
 }

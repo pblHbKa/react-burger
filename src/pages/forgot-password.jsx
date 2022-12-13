@@ -3,13 +3,15 @@ import {
   Button,
   EmailInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link } from "react-router-dom";
+import { Link, Redirect, useHistory } from "react-router-dom";
 import { AppHeader } from "../components/app-header/app-header";
 import { resetPassword as resetPasswordAPI } from "../utils/burger-api";
 import userInStyles from "./userIn.module.css";
 
 export const ForgotPassword = () => {
+
   const [email, setEmail] = useState("");
+  const history = useHistory(); 
 
   const setUserEmail = (event) => {
     setEmail(event.target.value);
@@ -19,7 +21,7 @@ export const ForgotPassword = () => {
     event.preventDefault();
     resetPasswordAPI(email)
       .then((res) => {
-        console.log(res);
+        history.replace({ pathname: '/reset-password' });
       })
       .catch((err) => {
         console.log(err);

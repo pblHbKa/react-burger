@@ -4,7 +4,7 @@ import {
   Input,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { AppHeader } from "../components/app-header/app-header";
 import userInStyles from "./userIn.module.css";
 import { setPassword as setPasswordAPI } from "../utils/burger-api";
@@ -12,6 +12,7 @@ import { setPassword as setPasswordAPI } from "../utils/burger-api";
 export const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
+  const history = useHistory(); 
 
   const handleChange = (event) => {
     if (event.target.name === "password") {
@@ -25,7 +26,7 @@ export const ResetPassword = () => {
     event.preventDefault();
     setPasswordAPI(newPassword, verificationCode)
       .then((res) => {
-        console.log(res);
+        history.replace({ pathname: '/' });
       })
       .catch((err) => {
         console.log(err);

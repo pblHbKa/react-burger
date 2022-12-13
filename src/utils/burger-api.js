@@ -37,7 +37,7 @@ export function setPassword(password, token) {
   })
 }
 
-export function createUser(email, password, name) {
+export function createUser({email, password, name}) {
   return request(`${BURGER_API_URL}/auth/register`, {
     method: "POST",
     headers: {
@@ -48,7 +48,7 @@ export function createUser(email, password, name) {
   })
 }
 
-export function authorization(email, password) {
+export function authorization({email, password}) {
   return request(`${BURGER_API_URL}/auth/login`, {
     method: "POST",
     headers: {
@@ -85,11 +85,18 @@ export function getUserInfo(token) {
   return request(`${BURGER_API_URL}/auth/user`, {
     method: "GET",
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
       Authorization: 'Bearer ' + token
-    },
-    body: JSON.stringify({ token }),
+    }
+  })
+}
+
+export function updateUserInfo(token) {
+  return request(`${BURGER_API_URL}/auth/user`, {
+    method: "PATCH",
+    headers: {
+      Authorization: 'Bearer ' + token,
+      name: 'nfnfnf'
+    }
   })
 }
 
