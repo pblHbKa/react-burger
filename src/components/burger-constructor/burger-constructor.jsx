@@ -22,9 +22,16 @@ import {
 import { ConstructorCard } from "../constructor-card/constructor-card";
 import { createOrder } from "../../services/actions/burger-constructor"
 import { Loader } from "../loader/loader";
+import { useAuth } from "../../services/reduces/user";
+import { Redirect, useHistory } from "react-router-dom";
 
 export const BurgerConstructor = () => {
   const dispatch = useDispatch();
+  
+  const auth = useAuth();
+  const user = auth.user;
+
+  const history = useHistory();
 
   const orderNumber = useSelector((state) => state.order.number);
 
@@ -48,12 +55,16 @@ export const BurgerConstructor = () => {
   }, [data]);
 
   const placeOrder = () => {
+    if (user) {
     const ingredientsId = [
       ingredientsGroup.bun._id,
       ...ingredientsGroup.ingredients.map((el) => el._id),
       ingredientsGroup.bun._id,
     ];
     dispatch(createOrder(ingredientsId));
+  } else {
+    history.push("/login");
+  }
   };
 
   const [, dropTarget] = useDrop({
@@ -144,9 +155,7 @@ export const BurgerConstructor = () => {
         </Modal>
       )}
       {isOrderLoad && (
-        //<Modal closeModal={closeOrderInfo}>
           <Loader/>
-        //</Modal>
       )}
     </>
   );
