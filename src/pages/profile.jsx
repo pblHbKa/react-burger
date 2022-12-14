@@ -15,7 +15,7 @@ export const Profile = () => {
   const user = auth.user;
 
   const [email, setEmail] = useState(user.email);
-  const [password, setPassword] = useState("password");
+  const [password, setPassword] = useState("");
   const [name, setName] = useState(user.name);
   const [modified, setModified] = useState(false);
 
@@ -37,16 +37,18 @@ export const Profile = () => {
   };
 
   const resetChanges = () => {
-    auth.getUserInfo().then(res => {
-      console.log(res);
+    auth.getUserInfo().then((res) => {
+      setEmail(user.email);
+      setPassword("");
+      setName(user.name);
+      setModified(false);
     });
-    setModified(false);
-  }
+  };
 
   const saveChanges = () => {
-    auth.updateUserInfo();
+    auth.updateUserInfo({ name, user, password });
     setModified(false);
-  }
+  };
 
   return (
     <>
@@ -73,12 +75,16 @@ export const Profile = () => {
           >
             История заказов
           </NavLink>
-          <a
-            className={`${profileStyles.link} text text_type_main-medium text_color_inactive pt-4 pb-4`}
+          <Button
+            htmlType="button"
+            type="secondary"
+            size="small"
             onClick={logout}
+            style={{ textAlign: "left" }}
+            extraClass="text text_type_main-medium text_color_inactive pt-4 pb-4"
           >
             Выход
-          </a>
+          </Button>
           <p className="text text_type_main-default text_color_inactive mt-20">
             В этом разделе вы можете изменить свои персональные данные
           </p>

@@ -57,14 +57,14 @@ export function useProvideAuth() {
     const token = getCookie("accessToken");
     const data = await getUserInfoAPI(token).then((res) => {
       if (res.success) {
-        return res.user;
+        setUser(res.user);
       }
     });
   };
 
-  const updateUserInfo = async () => {
+  const updateUserInfo = async (userData) => {
     const token = getCookie("accessToken");
-    const data = await updateUserInfoAPI(token).then((res) => {
+    const data = await updateUserInfoAPI(token, userData).then((res) => {
       if (res.success) {
         return res.user;
       }

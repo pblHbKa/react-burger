@@ -90,13 +90,15 @@ export function getUserInfo(token) {
   })
 }
 
-export function updateUserInfo(token) {
+export function updateUserInfo(token, {name, email, password}) {
   return request(`${BURGER_API_URL}/auth/user`, {
     method: "PATCH",
     headers: {
-      Authorization: 'Bearer ' + token,
-      name: 'nfnfnf'
-    }
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: 'Bearer ' + token
+    },
+    body: JSON.stringify({ email, name }),
   })
 }
 
