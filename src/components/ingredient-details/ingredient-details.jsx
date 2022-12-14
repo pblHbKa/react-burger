@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { ingredientType } from "../../utils/common";
 
 const IngredientDetails = (props) => {
+  
   return (
     props.data && (
       <div className={ingredientsDetailsStyles.ingredientsDetails}>

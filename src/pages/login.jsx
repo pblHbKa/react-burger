@@ -40,7 +40,6 @@ export const LogIn = () => {
 
   return (
     <>
-      <AppHeader />
       <form className={userInStyles.userInform} onSubmit={handleSubmit}>
         <h1 className="text text_type_main-medium">Вход</h1>
         <EmailInput

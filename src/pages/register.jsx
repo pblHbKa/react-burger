@@ -36,7 +36,6 @@ export const Registration = () => {
 
   return (
     <>
-      <AppHeader />
       <form className={userInStyles.userInform} onSubmit={handleSubmit}>
         <h1 className="text text_type_main-medium">Регистрация</h1>
         <Input

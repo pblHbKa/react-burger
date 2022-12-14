@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import { ingredientType } from "../../utils/common";
 import { useDrag } from "react-dnd/dist/hooks";
 
-export const IngredientCard = ({ onCardClick, ingredient }) => {
+export const IngredientCard = ({ ingredient }) => {
 
   const [, ref] = useDrag({
     type:  'ingredient',
@@ -17,9 +17,6 @@ export const IngredientCard = ({ onCardClick, ingredient }) => {
   return (
     <div
       className={IngredientCardStyles.card}
-      onClick={() => {
-        onCardClick(ingredient);
-      }}
       draggable
       ref={ref}
     >
@@ -37,6 +34,5 @@ export const IngredientCard = ({ onCardClick, ingredient }) => {
 };
 
 IngredientCard.propTypes = {
-  onCardClick: PropTypes.func,
-  ingredient: ingredientType.isRequired,
+ ingredient: ingredientType.isRequired,
 };

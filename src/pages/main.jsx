@@ -8,7 +8,6 @@ import mainStyles from "./main.module.css";
 export const Main = () => {
   return (
     <>
-      <AppHeader />
       <main className={mainStyles.main}>
         <DndProvider backend={HTML5Backend}>
           <BurgerIngredients />

@@ -52,7 +52,6 @@ export const Profile = () => {
 
   return (
     <>
-      <AppHeader />
       <main className={profileStyles.main}>
         <div className={profileStyles.linkPanel}>
           <NavLink

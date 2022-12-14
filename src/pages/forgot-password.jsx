@@ -30,7 +30,6 @@ export const ForgotPassword = () => {
 
   return (
     <>
-      <AppHeader />
       <form className={userInStyles.userInform} onSubmit={resetPassword}>
         <h1 className="text text_type_main-medium">Восстановление пароля</h1>
         <EmailInput
