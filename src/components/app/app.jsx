@@ -14,7 +14,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Modal } from "../modal/modal";
 import { getIngredients } from "../../services/actions/burger-ingredients";
 import { AppHeader } from "../app-header/app-header";
-import { getCookie } from "../../utils/cookies";
 import { getUserInfo } from "../../services/actions/user";
 
 function App() {

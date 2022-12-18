@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import burgerConstructorStyles from "./burger-constructor.module.css";
 import {
   ConstructorElement,
@@ -9,16 +9,14 @@ import { Modal } from "../modal/modal";
 import { OrderDetails } from "../order-details/order-details";
 import { useDispatch, useSelector } from "react-redux";
 import { setOrder } from "../../services/reduces/order";
-import {
-  addIngredient,
-} from "../../services/reduces/burger-constructor";
+import { addIngredient } from "../../services/reduces/burger-constructor";
 import { useDrop } from "react-dnd/dist/hooks/useDrop";
 import {
   increaseCount,
   bunChange,
 } from "../../services/reduces/burger-ingredients";
 import { ConstructorCard } from "../constructor-card/constructor-card";
-import { createOrder } from "../../services/actions/burger-constructor"
+import { createOrder } from "../../services/actions/burger-constructor";
 import { Loader } from "../loader/loader";
 import { useHistory } from "react-router-dom";
 import { getCookie } from "../../utils/cookies";
@@ -34,7 +32,7 @@ export const BurgerConstructor = () => {
   };
 
   const data = useSelector((state) => state.burgerConstructor.data);
-  const isOrderLoad = useSelector((state) => state.burgerConstructor.isOrderLoad);
+  const [isOrderLoad, setIsOrderLoad] = useState(false);
 
   const totalPrice = useMemo(() => {
     return data.reduce(
@@ -52,15 +50,17 @@ export const BurgerConstructor = () => {
 
   const placeOrder = () => {
     if (token) {
-    const ingredientsId = [
-      ingredientsGroup.bun._id,
-      ...ingredientsGroup.ingredients.map((el) => el._id),
-      ingredientsGroup.bun._id,
-    ];
-    dispatch(createOrder(ingredientsId));
-  } else {
-    history.push("/login");
-  }
+      setIsOrderLoad(true);
+      const ingredientsId = [
+        ingredientsGroup.bun._id,
+        ...ingredientsGroup.ingredients.map((el) => el._id),
+        ingredientsGroup.bun._id,
+      ];
+      dispatch(createOrder(ingredientsId))
+      .finally(() => setIsOrderLoad(false));
+    } else {
+      history.push("/login");
+    }
   };
 
   const [, dropTarget] = useDrop({
@@ -76,83 +76,89 @@ export const BurgerConstructor = () => {
 
   return (
     <>
-      {!isOrderLoad &&
-      (<section
-        className={burgerConstructorStyles.constructorBox}
-        ref={dropTarget}
-      >
-        {data.length > 0 && (
-          <div className="pl-10 pr-10 pt-25 mb-10 ml-40">
-            {ingredientsGroup.bun &&(
-            <div
-              className={`ml-8 ${burgerConstructorStyles.constructorElement}`}
-              key={`${ingredientsGroup.bun._id}_top`}
-            >
-              <ConstructorElement
-                type="top"
-                isLocked={true}
-                text={`${ingredientsGroup.bun.name} верх`}
-                price={ingredientsGroup.bun.price}
-                thumbnail={ingredientsGroup.bun.image}
-              />
-            </div>)}
-            <ul className={burgerConstructorStyles.ul}>
-              {ingredientsGroup.ingredients.map((el) => {
-                return (
-                  <li key={el.uuid}>
-                    <ConstructorCard type={"primary"} el={el} />
-                  </li>
-                );
-              })}
-            </ul>
-            {ingredientsGroup.bun &&(
-            <div className="ml-8" key={`${ingredientsGroup.bun._id}_bottom`}>
-              <ConstructorElement
-                type="bottom"
-                isLocked={true}
-                text={`${ingredientsGroup.bun.name} низ`}
-                price={ingredientsGroup.bun.price}
-                thumbnail={ingredientsGroup.bun.image}
-              />
-            </div>)}
-            <div className={`mt-10 ${burgerConstructorStyles.order}`}>
-              <div className={`mr-10 ${burgerConstructorStyles.order}`}>
-                <p
-                  className={`text text_type_digits-medium ${burgerConstructorStyles.totalPrice}`}
+      {!isOrderLoad && (
+        <section
+          className={burgerConstructorStyles.constructorBox}
+          ref={dropTarget}
+        >
+          {data.length > 0 && (
+            <div className="pl-10 pr-10 pt-25 mb-10 ml-40">
+              {ingredientsGroup.bun && (
+                <div
+                  className={`ml-8 ${burgerConstructorStyles.constructorElement}`}
+                  key={`${ingredientsGroup.bun._id}_top`}
                 >
-                  {totalPrice}
-                </p>
-                <CurrencyIcon type="primary" />
+                  <ConstructorElement
+                    type="top"
+                    isLocked={true}
+                    text={`${ingredientsGroup.bun.name} верх`}
+                    price={ingredientsGroup.bun.price}
+                    thumbnail={ingredientsGroup.bun.image}
+                  />
+                </div>
+              )}
+              <ul className={burgerConstructorStyles.ul}>
+                {ingredientsGroup.ingredients.map((el) => {
+                  return (
+                    <li key={el.uuid}>
+                      <ConstructorCard type={"primary"} el={el} />
+                    </li>
+                  );
+                })}
+              </ul>
+              {ingredientsGroup.bun && (
+                <div
+                  className="ml-8"
+                  key={`${ingredientsGroup.bun._id}_bottom`}
+                >
+                  <ConstructorElement
+                    type="bottom"
+                    isLocked={true}
+                    text={`${ingredientsGroup.bun.name} низ`}
+                    price={ingredientsGroup.bun.price}
+                    thumbnail={ingredientsGroup.bun.image}
+                  />
+                </div>
+              )}
+              <div className={`mt-10 ${burgerConstructorStyles.order}`}>
+                <div className={`mr-10 ${burgerConstructorStyles.order}`}>
+                  <p
+                    className={`text text_type_digits-medium ${burgerConstructorStyles.totalPrice}`}
+                  >
+                    {totalPrice}
+                  </p>
+                  <CurrencyIcon type="primary" />
+                </div>
+                {ingredientsGroup.bun && (
+                  <Button
+                    htmlType="button"
+                    type="primary"
+                    size="large"
+                    onClick={() => {
+                      placeOrder();
+                    }}
+                  >
+                    Оформить заказ
+                  </Button>
+                )}
               </div>
-              {ingredientsGroup.bun && (<Button
-                htmlType="button"
-                type="primary"
-                size="large"
-                onClick={() => {
-                  placeOrder();
-                }}
-              >
-                Оформить заказ
-              </Button>)}
             </div>
-          </div>
-        )}
-        {data.length === 0 && (
-          <div className= {burgerConstructorStyles.initialTextBox}>
-            <h2 className="text text_type_main-medium">
-              Перетащи сюда ингредиенты
-            </h2>
-          </div>
-        )}
-      </section>)}
+          )}
+          {data.length === 0 && (
+            <div className={burgerConstructorStyles.initialTextBox}>
+              <h2 className="text text_type_main-medium">
+                Перетащи сюда ингредиенты
+              </h2>
+            </div>
+          )}
+        </section>
+      )}
       {orderNumber && (
         <Modal closeModal={closeOrderInfo}>
           <OrderDetails orderNumber={orderNumber} />
         </Modal>
       )}
-      {isOrderLoad && (
-          <Loader/>
-      )}
+      {isOrderLoad && <Loader />}
     </>
   );
 };
