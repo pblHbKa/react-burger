@@ -3,10 +3,10 @@ import {
   EmailInput,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link, Redirect, useHistory } from "react-router-dom";
-import userInStyles from "./userIn.module.css";
+import { Link, useHistory } from "react-router-dom";
+import userInStyles from "../userIn.module.css";
 import { useState } from "react";
-import { signIn } from "../services/actions/user";
+import { signIn } from "../../services/actions/user";
 import { useDispatch, useSelector } from "react-redux";
 
 export const LogIn = () => {

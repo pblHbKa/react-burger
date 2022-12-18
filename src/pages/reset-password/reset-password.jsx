@@ -5,10 +5,10 @@ import {
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, Redirect, useHistory } from "react-router-dom";
-import userInStyles from "./userIn.module.css";
-import { setPassword as setPasswordAPI } from "../utils/burger-api";
+import userInStyles from "../userIn.module.css";
+import { setPassword as setPasswordAPI } from "../../utils/burger-api";
 import { useDispatch, useSelector } from "react-redux";
-import { canResetPassword as setcanResetPassword } from "../services/reduces/user";
+import { canResetPassword as setcanResetPassword } from "../../services/reduces/user";
 
 export const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");

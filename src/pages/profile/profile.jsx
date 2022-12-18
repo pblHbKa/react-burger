@@ -8,7 +8,7 @@ import { NavLink, useHistory } from "react-router-dom";
 import profileStyles from "./profile.module.css";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { signOut, updateUserInfo, getUserInfo } from "../services/actions/user";
+import { signOut, updateUserInfo, getUserInfo } from "../../services/actions/user";
 
 export const Profile = () => {
   const dispatch = useDispatch();

@@ -5,10 +5,10 @@ import {
   EmailInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useHistory } from "react-router-dom";
-import userInStyles from "./userIn.module.css";
+import userInStyles from "../userIn.module.css";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { createUser } from "../services/actions/user";
+import { createUser } from "../../services/actions/user";
 
 export const Registration = () => {
   const [name, setName] = useState("");
