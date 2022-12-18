@@ -7,8 +7,12 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { NavLink } from "react-router-dom";
+import { useState } from "react";
 
 export const AppHeader = () => {
+
+  const [activeLink, setActiveLink] = useState("constructor");
+
   return (
     <header className={appHeaderStyles.header}>
       <nav className={`${appHeaderStyles.nav} pb-4 pt-4`}>
@@ -21,9 +25,10 @@ export const AppHeader = () => {
               activeStyle={{
                 color: "white",
               }}
+              onClick={() => {setActiveLink("constructor")}}
             >
               <div className={appHeaderStyles.link}>
-                <BurgerIcon type="primary" />
+                <BurgerIcon type={activeLink === "constructor" ? "primary" : "secondary"}/>
                 <p className="text text_type_main-default ml-2">Конструктор</p>
               </div>
             </NavLink>
@@ -35,9 +40,10 @@ export const AppHeader = () => {
               activeStyle={{
                 color: "white",
               }}
+              onClick={() => {setActiveLink("orderList")}}
             >
               <div className={appHeaderStyles.link}>
-                <ListIcon type="secondary" />
+                <ListIcon type={activeLink === "orderList" ? "primary" : "secondary"} />
                 <p className="text text_type_main-default ml-2">
                   Лента заказов
                 </p>
@@ -56,9 +62,10 @@ export const AppHeader = () => {
               activeStyle={{
                 color: "white",
               }}
+              onClick={() => {setActiveLink("profile")}}
             >
               <div className={appHeaderStyles.link}>
-                <ProfileIcon type="secondary" />
+                <ProfileIcon type={activeLink === "profile" ? "primary" : "secondary"} />
                 <p className="text text_type_main-default ml-2">
                   Личный кабинет
                 </p>
