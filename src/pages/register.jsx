@@ -2,21 +2,20 @@ import {
   Button,
   Input,
   PasswordInput,
-  EmailInput
+  EmailInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link } from "react-router-dom";
-import { AppHeader } from "../components/app-header/app-header";
+import { Link, useHistory } from "react-router-dom";
 import userInStyles from "./userIn.module.css";
-import { useAuth } from "../services/reduces/user";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { createUser } from "../services/actions/user";
 
 export const Registration = () => {
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const auth = useAuth();
+  const dispatch = useDispatch();
+  const history = useHistory();
 
   const handleChange = (event) => {
     if (event.target.name === "email") {
@@ -25,13 +24,15 @@ export const Registration = () => {
       setName(event.target.value);
     } else {
       setPassword(event.target.value);
-
     }
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    auth.createUser({ email, password, name});
+    if (email && password && name) {
+      dispatch(createUser({ email, password, name }))
+      .then(() => history.push('/'));
+    }
   };
 
   return (

@@ -4,50 +4,56 @@ import {
   PasswordInput,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { NavLink } from "react-router-dom";
-import { AppHeader } from "../components/app-header/app-header";
+import { NavLink, useHistory } from "react-router-dom";
 import profileStyles from "./profile.module.css";
-import { useAuth } from "../services/reduces/user";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { signOut, updateUserInfo, getUserInfo } from "../services/actions/user";
 
 export const Profile = () => {
-  const auth = useAuth();
-  const user = auth.user;
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.userInfo.user);
+  const history = useHistory();
 
   const [email, setEmail] = useState(user.email);
   const [password, setPassword] = useState("");
   const [name, setName] = useState(user.name);
   const [modified, setModified] = useState(false);
 
+  useEffect(() => {
+    setEmail(user.email);
+    setName(user.name);
+    setPassword(user.password);
+  }, [user]);
+
   const handleChange = (event) => {
     if (event.target.name === "email") {
       setEmail(event.target.value);
-      setModified(true);
     } else if (event.target.name === "userName") {
       setName(event.target.value);
-      setModified(true);
     } else {
       setPassword(event.target.value);
-      setModified(true);
     }
+    setModified(true);
   };
 
   const logout = () => {
-    auth.signOut();
+    dispatch(signOut())
+    .then((res) => {
+      history.push('/login')
+    });
   };
 
   const resetChanges = () => {
-    auth.getUserInfo().then((res) => {
       setEmail(user.email);
       setPassword("");
       setName(user.name);
       setModified(false);
-    });
-  };
+    }
 
   const saveChanges = () => {
-    auth.updateUserInfo({ name, user, password });
-    setModified(false);
+    dispatch(updateUserInfo({ name, email, password }))
+    .then(() => {setModified(false)})
   };
 
   return (
@@ -79,8 +85,7 @@ export const Profile = () => {
             type="secondary"
             size="small"
             onClick={logout}
-            style={{ textAlign: "left" }}
-            extraClass="text text_type_main-medium text_color_inactive pt-4 pb-4"
+            extraClass={`${profileStyles.exitButton} text text_type_main-medium text_color_inactive pt-4 pb-4`}
           >
             Выход
           </Button>

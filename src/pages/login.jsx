@@ -3,15 +3,18 @@ import {
   EmailInput,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link, Redirect } from "react-router-dom";
-import { AppHeader } from "../components/app-header/app-header";
+import { Link, Redirect, useHistory } from "react-router-dom";
 import userInStyles from "./userIn.module.css";
 import { useState } from "react";
-import { useAuth } from "../services/reduces/user";
+import { signIn } from "../services/actions/user";
+import { useDispatch, useSelector } from "react-redux";
 
 export const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.userInfo.user);
+  const history = useHistory();
 
   const handleChange = (event) => {
     if (event.target.name === "email") {
@@ -21,22 +24,13 @@ export const LogIn = () => {
     }
   };
 
-  const auth = useAuth();
-
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    auth.signIn({ email, password });
+    if (email && password) {
+      dispatch(signIn(email, password))
+      .then(() => history.push("/profile"));
+    }
   };
-
-  if (auth.user) {
-    return (
-      <Redirect
-        to={{
-          pathname: '/'
-        }}
-      />
-    );
-  }
 
   return (
     <>

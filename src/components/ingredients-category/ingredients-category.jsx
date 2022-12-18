@@ -32,5 +32,5 @@ export const IngredientsCategory = forwardRef(
 IngredientsCategory.propTypes = {
   categoryId: PropTypes.string.isRequired,
   categoryName: PropTypes.string.isRequired,
-  group: PropTypes.arrayOf(ingredientType).isRequired,
+  group: PropTypes.arrayOf(ingredientType.isRequired).isRequired,
 };

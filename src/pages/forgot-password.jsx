@@ -3,15 +3,16 @@ import {
   Button,
   EmailInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link, Redirect, useHistory } from "react-router-dom";
-import { AppHeader } from "../components/app-header/app-header";
+import { Link, useHistory } from "react-router-dom";
 import { resetPassword as resetPasswordAPI } from "../utils/burger-api";
 import userInStyles from "./userIn.module.css";
+import { useDispatch } from "react-redux";
+import { canResetPassword as setcanResetPassword } from "../services/reduces/user";
 
 export const ForgotPassword = () => {
-
   const [email, setEmail] = useState("");
-  const history = useHistory(); 
+  const history = useHistory();
+  const dispatch = useDispatch();
 
   const setUserEmail = (event) => {
     setEmail(event.target.value);
@@ -19,13 +20,16 @@ export const ForgotPassword = () => {
 
   const resetPassword = (event) => {
     event.preventDefault();
-    resetPasswordAPI(email)
-      .then((res) => {
-        history.replace({ pathname: '/reset-password' });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    dispatch(setcanResetPassword(true));
+    if (email) {
+      resetPasswordAPI(email)
+        .then((res) => {
+          history.replace({ pathname: "/reset-password" });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   return (

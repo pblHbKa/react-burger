@@ -1,18 +1,19 @@
 const BURGER_API_URL = "https://norma.nomoreparties.space/api";
 
-export function createOrder(ingredients) {
+export function createOrder(ingredients, token) {
   return request(`${BURGER_API_URL}/orders`, {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
     },
     body: JSON.stringify({ ingredients }),
-  })
+  });
 }
 
 export function getIngredients() {
-  return request(`${BURGER_API_URL}/ingredients`)
+  return request(`${BURGER_API_URL}/ingredients`);
 }
 
 export function resetPassword(email) {
@@ -23,7 +24,7 @@ export function resetPassword(email) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ email }),
-  })
+  });
 }
 
 export function setPassword(password, token) {
@@ -34,10 +35,10 @@ export function setPassword(password, token) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ password, token }),
-  })
+  });
 }
 
-export function createUser({email, password, name}) {
+export function createUser({ email, password, name }) {
   return request(`${BURGER_API_URL}/auth/register`, {
     method: "POST",
     headers: {
@@ -45,10 +46,10 @@ export function createUser({email, password, name}) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ email, password, name }),
-  })
+  });
 }
 
-export function authorization({email, password}) {
+export function authorization({ email, password }) {
   return request(`${BURGER_API_URL}/auth/login`, {
     method: "POST",
     headers: {
@@ -56,7 +57,7 @@ export function authorization({email, password}) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ email, password }),
-  })
+  });
 }
 
 export function logout(token) {
@@ -67,39 +68,45 @@ export function logout(token) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ token }),
-  })
+  });
 }
 
-export function updateToken(token) {
+export function updateToken(tokenRefresh, tokenAccess) {
   return request(`${BURGER_API_URL}/auth/token`, {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      Authorization: "Bearer " + tokenAccess,
     },
-    body: JSON.stringify({ token }),
-  })
+    body: JSON.stringify({ "token": tokenRefresh }),
+  });
 }
 
 export function getUserInfo(token) {
-  return request(`${BURGER_API_URL}/auth/user`, {
+  return fetch(`${BURGER_API_URL}/auth/user`, {
     method: "GET",
     headers: {
-      Authorization: 'Bearer ' + token
-    }
-  })
+      Authorization: "Bearer " + token,
+    },
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+     } else if (res.status === 403)  {
+      return (res.status);
+     }});
 }
 
-export function updateUserInfo(token, {name, email, password}) {
+export function updateUserInfo(token, { name, email, password }) {
   return request(`${BURGER_API_URL}/auth/user`, {
     method: "PATCH",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: 'Bearer ' + token
+      Authorization: "Bearer " + token,
     },
-    body: JSON.stringify({ email, name }),
-  })
+    body: JSON.stringify({ email, name, password }),
+  });
 }
 
 function request(url, options) {

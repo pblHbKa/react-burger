@@ -1,10 +1,9 @@
-import { React, useMemo, useState, useContext, useEffect } from "react";
+import { useMemo } from "react";
 import burgerConstructorStyles from "./burger-constructor.module.css";
 import {
   ConstructorElement,
   CurrencyIcon,
   Button,
-  DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Modal } from "../modal/modal";
 import { OrderDetails } from "../order-details/order-details";
@@ -12,7 +11,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setOrder } from "../../services/reduces/order";
 import {
   addIngredient,
-  setData,
 } from "../../services/reduces/burger-constructor";
 import { useDrop } from "react-dnd/dist/hooks/useDrop";
 import {
@@ -22,24 +20,22 @@ import {
 import { ConstructorCard } from "../constructor-card/constructor-card";
 import { createOrder } from "../../services/actions/burger-constructor"
 import { Loader } from "../loader/loader";
-import { useAuth } from "../../services/reduces/user";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { getCookie } from "../../utils/cookies";
 
 export const BurgerConstructor = () => {
   const dispatch = useDispatch();
-  
-  const auth = useAuth();
-  const user = auth.user;
-
   const history = useHistory();
-
   const orderNumber = useSelector((state) => state.order.number);
+  const token = getCookie("accessToken");
 
   const closeOrderInfo = () => {
     dispatch(setOrder(null));
   };
+
   const data = useSelector((state) => state.burgerConstructor.data);
   const isOrderLoad = useSelector((state) => state.burgerConstructor.isOrderLoad);
+
   const totalPrice = useMemo(() => {
     return data.reduce(
       (prev, el) => prev + el.price * (el.type === "bun" ? 2 : 1),
@@ -55,7 +51,7 @@ export const BurgerConstructor = () => {
   }, [data]);
 
   const placeOrder = () => {
-    if (user) {
+    if (token) {
     const ingredientsId = [
       ingredientsGroup.bun._id,
       ...ingredientsGroup.ingredients.map((el) => el._id),

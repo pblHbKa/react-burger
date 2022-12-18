@@ -9,26 +9,27 @@ import { Profile } from "../../pages/profile";
 import { ProtectedRoute } from "../protectedRoute/protectedRoute";
 import { useState, useEffect } from "react";
 import { Ingredient } from "../../pages/ingredient";
-import { ProvideAuth } from "../../services/reduces/user";
+import { ProvideAuth, useAuth } from "../../services/reduces/user";
 import { useDispatch, useSelector } from "react-redux";
 import { Modal } from "../modal/modal";
 import { getIngredients } from "../../services/actions/burger-ingredients";
 import { AppHeader } from "../app-header/app-header";
+import { getCookie } from "../../utils/cookies";
+import { getUserInfo } from "../../services/actions/user";
 
 function App() {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.burgerIngredients.data);
-  
+  const history = useHistory();
+  const location = useLocation();
+  const background = location.state?.background;
+
   useEffect(() => {
     dispatch(getIngredients());
   }, []);
 
-  //const ingredients = useSelector((state) => state.burgerIngredients.data);
-
-  const history = useHistory();
-  const location = useLocation();
-
-  const background = location.state?.background;
+  useEffect(() => {
+    dispatch(getUserInfo());
+  }, [dispatch]);
 
   const onModalClose = () => {
     history.goBack();
@@ -36,42 +37,40 @@ function App() {
 
   return (
     <>
-    <AppHeader/>
-      <ProvideAuth>
-        <Switch location={background || location}>
-          <Route path="/" exact>
-            <Main/>
-          </Route>
-          <ProtectedRoute onlyUnAuth path="/register">
-            <Registration />
-          </ProtectedRoute>
-          <ProtectedRoute onlyUnAuth path="/login">
-            <LogIn />
-          </ProtectedRoute>
-          <ProtectedRoute onlyUnAuth path="/forgot-password">
-            <ForgotPassword />
-          </ProtectedRoute>
-          <ProtectedRoute onlyUnAuth path="/reset-password">
-            <ResetPassword />
-          </ProtectedRoute>
-          <ProtectedRoute path="/profile">
-            <Profile />
-          </ProtectedRoute>
-          <Route path="/ingredients/:idIngredient">
+      <AppHeader />
+      <Switch location={background || location}>
+        <Route path="/" exact>
+          <Main />
+        </Route>
+        <ProtectedRoute onlyUnAuth path="/register">
+          <Registration />
+        </ProtectedRoute>
+        <ProtectedRoute onlyUnAuth path="/login">
+          <LogIn />
+        </ProtectedRoute>
+        <ProtectedRoute onlyUnAuth path="/forgot-password">
+          <ForgotPassword />
+        </ProtectedRoute>
+        <ProtectedRoute onlyUnAuth path="/reset-password">
+          <ResetPassword />
+        </ProtectedRoute>
+        <ProtectedRoute path="/profile">
+          <Profile />
+        </ProtectedRoute>
+        <Route path="/ingredients/:idIngredient">
+          <Ingredient title="Детали ингредиента" />
+        </Route>
+        <Route path="*">
+          <Error404 />
+        </Route>
+      </Switch>
+      {background && (
+        <Route path="/ingredients/:idIngredient">
+          <Modal closeModal={onModalClose} title="Детали ингредиента">
             <Ingredient />
-          </Route>
-          <Route path="*">
-            <Error404 />
-          </Route>
-        </Switch>
-        {background && (
-          <Route path="/ingredients/:idIngredient">
-            <Modal closeModal={onModalClose}>
-              <Ingredient />
-            </Modal>
-          </Route>
-        )}
-      </ProvideAuth>
+          </Modal>
+        </Route>
+      )}
     </>
   );
 }
