@@ -1,0 +1,51 @@
+.totalPrice {
+    margin-right: 9px;
+}
+
+.card {
+    background-color: #1C1C21;
+    border-radius: 40px;
+}
+
+.cardHead {
+    display: flex;
+    justify-content: space-between;
+}
+
+.priceInfo {
+    display: flex;
+}
+
+.ingredientPreview {
+    border: 2px solid transparent;
+    background: linear-gradient(#801AB2 0%, #4C4CFF 100%);
+    box-shadow: inset 0px 0px 0px 100vw #131316;
+    border-radius: 100px;
+    width: 64px;
+    height: 64px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+li:not(:first-child) {
+    margin-left: -16px;
+}
+
+.ingredientImg{
+    height: 56px;
+width: 112px;
+}
+
+.ingredientsList {
+    list-style-type: none;
+    display: flex;
+    padding: 0;
+}
+
+.orderInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
