@@ -1,0 +1,17 @@
+.ordersNumberList {
+    color: #0CC;
+    list-style-type: none;
+    padding: 0;
+}
+
+.ordersStatusBox {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 36px;
+}
+
+.ordersNumberBox {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}

@@ -11,17 +11,17 @@ export const OrderCard = () => {
             <h3 className="text text_type_main-medium mb-6 mt-6">Death Star Starship Main бургер</h3>
             <div className={orderCardStyles.orderInfo}>
                 <ul className={orderCardStyles.ingredientsList}>
-                    <li>
+                    <li className={orderCardStyles.ingredientsListItem}>
                         <div className={orderCardStyles.ingredientPreview}>
                             <img src="https://code.s3.yandex.net/react/code/meat-02-mobile.png" alt="" className={orderCardStyles.ingredientImg}/>
                         </div>
                     </li>
-                    <li>
+                    <li className={orderCardStyles.ingredientsListItem}>
                         <div className={orderCardStyles.ingredientPreview}>
                             <img src="https://code.s3.yandex.net/react/code/meat-02-mobile.png" alt="" className={orderCardStyles.ingredientImg}/>
                         </div>
                     </li>
-                    <li>
+                    <li className={orderCardStyles.ingredientsListItem}>
                         <div className={orderCardStyles.ingredientPreview}>
                             <img src="https://code.s3.yandex.net/react/code/meat-02-mobile.png" alt="" className={orderCardStyles.ingredientImg}/>
                         </div>

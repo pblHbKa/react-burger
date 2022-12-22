@@ -29,7 +29,7 @@
     align-items: center;
 }
 
-li:not(:first-child) {
+.ingredientsListItem:not(:first-child) {
     margin-left: -16px;
 }
 
