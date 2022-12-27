@@ -1,14 +1,15 @@
 import orderInfoStyles from "./order-info.module.css";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import PropTypes from "prop-types";
 
-export const OrderInfo = () => {
+export const OrderInfo = ({fullPage}) => {
   return (
-    <div className={`p-6 mt-4 ${orderInfoStyles.orderBox}`}>
-      <p
+    <div className={`p-6 mt-4 ${fullPage ? orderInfoStyles.orderBox : ''}`}>
+      {fullPage &&(<p
         className={`text text_type_digits-default ${orderInfoStyles.orderNumberText}`}
       >
         #034535
-      </p>
+      </p>)}
       <h3 className="text text_type_main-medium mb-3 mt-10">
         Death Star Starship Main бургер
       </h3>
@@ -157,4 +158,8 @@ export const OrderInfo = () => {
       </div>
     </div>
   );
+};
+
+OrderInfo.propTypes = {
+  fullPage: PropTypes.bool,
 };

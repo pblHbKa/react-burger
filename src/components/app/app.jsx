@@ -16,6 +16,7 @@ import { AppHeader } from "../app-header/app-header";
 import { getUserInfo } from "../../services/actions/user";
 import { Feed } from "../../pages/feed/feed";
 import { OrderInfo } from "../order-info/order-info";
+import { ProfileOrders } from "../../pages/profile-orders/profile-orders";
 
 function App() {
   const dispatch = useDispatch();
@@ -54,28 +55,41 @@ function App() {
         <ProtectedRoute onlyUnAuth path="/reset-password">
           <ResetPassword />
         </ProtectedRoute>
-        <ProtectedRoute path="/profile">
+        <ProtectedRoute path="/profile" exact>
           <Profile />
+        </ProtectedRoute>
+        <ProtectedRoute path="/profile/orders" exact>
+          <ProfileOrders />
+        </ProtectedRoute>
+        <ProtectedRoute path="/profile/orders/:id">
+          <OrderInfo fullPage/>
         </ProtectedRoute>
         <Route path="/ingredients/:idIngredient">
           <Ingredient title="Детали ингредиента" />
         </Route>
         <Route path="/feed/:id">
-          <OrderInfo/>
+          <OrderInfo fullPage/>
         </Route>
         <Route path="/feed">
-          <Feed/>
+          <Feed />
         </Route>
         <Route path="*">
           <Error404 />
         </Route>
       </Switch>
       {background && (
-        <Route path="/ingredients/:idIngredient">
-          <Modal closeModal={onModalClose} title="Детали ингредиента">
-            <Ingredient />
-          </Modal>
-        </Route>
+        <>
+          <Route path="/ingredients/:idIngredient">
+            <Modal closeModal={onModalClose} title="Детали ингредиента">
+              <Ingredient />
+            </Modal>
+          </Route>
+          <Route path="/feed/:id">
+            <Modal closeModal={onModalClose} title="#034535">
+              <OrderInfo />
+            </Modal>
+          </Route>
+        </>
       )}
     </>
   );
