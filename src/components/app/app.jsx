@@ -15,6 +15,7 @@ import { getIngredients } from "../../services/actions/burger-ingredients";
 import { AppHeader } from "../app-header/app-header";
 import { getUserInfo } from "../../services/actions/user";
 import { Feed } from "../../pages/feed/feed";
+import { OrderInfo } from "../order-info/order-info";
 
 function App() {
   const dispatch = useDispatch();
@@ -58,6 +59,9 @@ function App() {
         </ProtectedRoute>
         <Route path="/ingredients/:idIngredient">
           <Ingredient title="Детали ингредиента" />
+        </Route>
+        <Route path="/feed/:id">
+          <OrderInfo/>
         </Route>
         <Route path="/feed">
           <Feed/>

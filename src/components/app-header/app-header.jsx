@@ -35,7 +35,7 @@ export const AppHeader = () => {
           </li>
           <li className="pl-5 pr-5 pb-4 pt-4 ml-2">
             <NavLink
-              to="/order"
+              to="/feed"
               className={`${appHeaderStyles.link} text text_type_main-default text_color_inactive ml-2`}
               activeStyle={{
                 color: "white",
