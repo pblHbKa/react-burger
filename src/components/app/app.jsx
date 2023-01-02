@@ -85,7 +85,7 @@ function App() {
             </Modal>
           </Route>
           <Route path="/feed/:id">
-            <Modal closeModal={onModalClose} title="#034535">
+            <Modal closeModal={onModalClose}>
               <OrderInfo />
             </Modal>
           </Route>

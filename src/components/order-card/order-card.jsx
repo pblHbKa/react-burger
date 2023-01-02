@@ -1,67 +1,71 @@
-import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import {
+  CurrencyIcon,
+  FormattedDate,
+} from "@ya.praktikum/react-developer-burger-ui-components";
 import orderCardStyles from "./order-card.module.css";
 import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useMemo } from "react";
+import PropTypes from "prop-types";
+import { orderType } from "../../utils/common";
 
-export const OrderCard = () => {
+export const OrderCard = ({ order }) => {
+  const location = useLocation();
+  const ingredientsData = useSelector((state) => state.burgerIngredients.data);
 
-  const location = useLocation(); 
-    
+  const ingredients = useMemo(() => {
+    return order.ingredients.map((el) =>
+      ingredientsData.find((ingredient) => ingredient._id === el)
+    );
+  }, [order]);
+
+  const totalPrice = useMemo(() => {
+    return ingredients.reduce((prev, el) => prev + el.price, 0);
+  }, [ingredients]);
+
+  const dateFromServer = order.createdAt;
+
   return (
     <Link
       to={{
-        pathname: `/feed/fhgfh`, 
-        // ${ingredient._id}`,
+        pathname: `/feed/${order._id}`,
         state: { background: location },
       }}
-      key='fhgfh'
-      //{ingredient._id}
+      key={order._id}
       className={orderCardStyles.link}
     >
       <div className={`p-6 mt-4 ${orderCardStyles.card}`}>
         <div className={`${orderCardStyles.cardHead}`}>
-          <p className="text text_type_digits-default">#034535</p>
+          <p className="text text_type_digits-default">{`#${order.number}`}</p>
           <p className="text text_type_main-default text_color_inactive">
-            Сегодня, 16:20 i-GMT+3
+            <FormattedDate date={new Date(dateFromServer)} />
           </p>
         </div>
-        <h3 className="text text_type_main-medium mb-6 mt-6">
-          Death Star Starship Main бургер
-        </h3>
+        <h3 className="text text_type_main-medium mb-6 mt-6">{order.name}</h3>
         <div className={orderCardStyles.orderInfo}>
           <ul className={orderCardStyles.ingredientsList}>
-            <li className={orderCardStyles.ingredientsListItem}>
-              <div className={orderCardStyles.ingredientPreview}>
-                <img
-                  src="https://code.s3.yandex.net/react/code/meat-02-mobile.png"
-                  alt=""
-                  className={orderCardStyles.ingredientImg}
-                />
-              </div>
-            </li>
-            <li className={orderCardStyles.ingredientsListItem}>
-              <div className={orderCardStyles.ingredientPreview}>
-                <img
-                  src="https://code.s3.yandex.net/react/code/meat-02-mobile.png"
-                  alt=""
-                  className={orderCardStyles.ingredientImg}
-                />
-              </div>
-            </li>
-            <li className={orderCardStyles.ingredientsListItem}>
-              <div className={orderCardStyles.ingredientPreview}>
-                <img
-                  src="https://code.s3.yandex.net/react/code/meat-02-mobile.png"
-                  alt=""
-                  className={orderCardStyles.ingredientImg}
-                />
-              </div>
-            </li>
+            {ingredients.map((ingredient, index) => {
+              return (
+                <li
+                  className={orderCardStyles.ingredientsListItem}
+                  key={ingredient._id + "_" + index}
+                >
+                  <div className={orderCardStyles.ingredientPreview}>
+                    <img
+                      src={ingredient.image_mobile}
+                      alt={ingredient.name}
+                      className={orderCardStyles.ingredientImg}
+                    />
+                  </div>
+                </li>
+              );
+            })}
           </ul>
           <div className={orderCardStyles.priceInfo}>
             <p
               className={`text text_type_digits-default ${orderCardStyles.totalPrice}`}
             >
-              480
+              {totalPrice}
             </p>
             <CurrencyIcon type="primary" />
           </div>
@@ -69,4 +73,8 @@ export const OrderCard = () => {
       </div>
     </Link>
   );
+};
+
+OrderCard.propTypes = {
+  order: orderType.isRequired,
 };

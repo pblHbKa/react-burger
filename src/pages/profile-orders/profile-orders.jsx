@@ -12,6 +12,22 @@ export const ProfileOrders = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.userInfo.user);
   const history = useHistory();
+  const data = useSelector((state) => state.orderInfo.data);
+
+  useEffect(() => {
+    dispatch({
+      type: "WS_CONNECTION_START",
+      payload: {
+        url: "wss://norma.nomoreparties.space/orders",
+        isAuth: true,
+      },
+    });
+    return () => {
+      dispatch({
+        type: "WS_CONNECTION_STOP",
+      });
+    };
+  }, [dispatch]);
 
   const logout = () => {
     dispatch(signOut())
@@ -57,7 +73,7 @@ export const ProfileOrders = () => {
           В этом разделе вы можете просмотреть свою историю заказов
           </p>
         </div>
-        <FeedList/>
+        {data && <FeedList data={data}/>}
       </main>
     </>
   );

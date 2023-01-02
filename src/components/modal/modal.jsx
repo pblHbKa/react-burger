@@ -4,10 +4,19 @@ import modalStyles from "./modal.module.css";
 import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { ModalOverlay } from "../modal-overlay/modal-overlay";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const modalRoot = document.getElementById("root");
 
 const Modal = ({ closeModal, title, children }) => {
+  const { id } = useParams();
+  const orderInfo = useSelector((state) => state.orderInfo.data);
+  if (id !== undefined) {
+    const order = orderInfo.find((order) => order._id === id);
+    title = `#${order.number}`;
+  }
+
   useEffect(() => {
     const onKeydown = (ev) => {
       ev.key === "Escape" && closeModal();

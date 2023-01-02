@@ -80,7 +80,6 @@ export function updateUserInfo(userData) {
     const token = getCookie("accessToken");
     return updateUserInfoAPI(token, userData).then((res) => {
       if (res.success) {
-        console.log(res);
         dispatch(setUserInfo(res.user));
       }
     });

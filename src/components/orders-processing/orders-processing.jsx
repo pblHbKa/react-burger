@@ -1,6 +1,11 @@
 import ordersProcessingStyles from "./orders-processing.module.css";
+import PropTypes from "prop-types";
+import { orderType } from "../../utils/common";
 
-export const OrdersProcessing = () => {
+export const OrdersProcessing = ({ data, total, totalToday }) => {
+  const doneOrders = data.filter((order) => order.status === "done");
+  const inProgressOrders = data.filter((order) => order.status !== "done");
+
   return (
     <section>
       <div className={ordersProcessingStyles.ordersStatusBox}>
@@ -8,14 +13,18 @@ export const OrdersProcessing = () => {
           <p className="text text_type_main-medium mb-6">Готовы:</p>
           <div className={ordersProcessingStyles.ordersNumberBox}>
             <ul className={ordersProcessingStyles.ordersNumberList}>
-              <li className="text text_type_digits-default">034533</li>
-              <li className="text text_type_digits-default">034533</li>
-              <li className="text text_type_digits-default">034533</li>
-              <li className="text text_type_digits-default">034533</li>
-              <li className="text text_type_digits-default">034533</li>
+              {doneOrders.slice(0, 10).map((el) => (
+                <li className="text text_type_digits-default" key={el.number}>
+                  {el.number}
+                </li>
+              ))}
             </ul>
             <ul className={ordersProcessingStyles.ordersNumberList}>
-              <li className="text text_type_digits-default">034533</li>
+              {doneOrders.slice(10, 20).map((el) => (
+                <li className="text text_type_digits-default" key={el.number}>
+                  {el.number}
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -23,19 +32,36 @@ export const OrdersProcessing = () => {
           <p className="text text_type_main-medium mb-6">В работе:</p>
           <div className={ordersProcessingStyles.ordersNumberBox}>
             <ul className={ordersProcessingStyles.ordersNumberList}>
-              <li className="text text_type_digits-default">034533</li>
+              {inProgressOrders.slice(0, 10).map((el) => (
+                <li className="text text_type_digits-default" key={el.number}>
+                  {el.number}
+                </li>
+              ))}
+            </ul>
+            <ul className={ordersProcessingStyles.ordersNumberList}>
+              {inProgressOrders.slice(10, 20).map((el) => (
+                <li className="text text_type_digits-default" key={el.number}>
+                  {el.number}
+                </li>
+              ))}
             </ul>
           </div>
         </div>
       </div>
       <div className="mt-15 mb-15">
         <p className="text text_type_main-medium">Выполнено за все время:</p>
-        <p className="text text_type_digits-large">28 752</p>
+        <p className="text text_type_digits-large">{total}</p>
       </div>
       <div>
         <p className="text text_type_main-medium">Выполнено за сегодня:</p>
-        <p className="text text_type_digits-large">138</p>
+        <p className="text text_type_digits-large">{totalToday}</p>
       </div>
     </section>
   );
+};
+
+OrdersProcessing.propTypes = {
+  data: PropTypes.arrayOf(orderType.isRequired).isRequired,
+  totalToday: PropTypes.number,
+  total: PropTypes.number,
 };
