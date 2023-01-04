@@ -8,10 +8,11 @@ import { useSelector } from "react-redux";
 import { useMemo } from "react";
 import PropTypes from "prop-types";
 import { orderType } from "../../utils/common";
+import { selectors } from "../..";
 
 export const OrderCard = ({ order }) => {
   const location = useLocation();
-  const ingredientsData = useSelector((state) => state.burgerIngredients.data);
+  const ingredientsData = useSelector(selectors.burgerIngredientsData);
 
   const ingredients = useMemo(() => {
     return order.ingredients.map((el) =>
@@ -44,7 +45,7 @@ export const OrderCard = ({ order }) => {
         <h3 className="text text_type_main-medium mb-6 mt-6">{order.name}</h3>
         <div className={orderCardStyles.orderInfo}>
           <ul className={orderCardStyles.ingredientsList}>
-            {ingredients.map((ingredient, index) => {
+            {ingredients.slice(0,6).map((ingredient, index) => {
               return (
                 <li
                   className={orderCardStyles.ingredientsListItem}
@@ -56,6 +57,11 @@ export const OrderCard = ({ order }) => {
                       alt={ingredient.name}
                       className={orderCardStyles.ingredientImg}
                     />
+                    {index === 5 &&
+                      (<div className={orderCardStyles.hiddenIngredientsBackground}>
+                      <p className={`text text_type_main-default ${orderCardStyles.hiddenIngredientsCount}`}>{`+${ingredients.length - 5}`}</p>
+                      </div>)
+                    }
                   </div>
                 </li>
               );

@@ -9,12 +9,13 @@ import userInStyles from "../userIn.module.css";
 import { setPassword as setPasswordAPI } from "../../utils/burger-api";
 import { useDispatch, useSelector } from "react-redux";
 import { canResetPassword as setcanResetPassword } from "../../services/reduces/user";
+import { selectors } from "../..";
 
 export const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const history = useHistory();
-  const canResetPassword = useSelector((state) => state.userInfo.canResetPassword);
+  const canResetPassword = useSelector(selectors.userInfoCanResetPassword);
   const dispatch = useDispatch();
 
   if (!canResetPassword) {

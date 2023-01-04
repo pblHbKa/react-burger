@@ -7,12 +7,13 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signOut, updateUserInfo, getUserInfo } from "../../services/actions/user";
 import { FeedList } from "../../components/feed-list/feed-list";
+import { selectors } from "../..";
 
 export const ProfileOrders = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.userInfo.user);
+  const user = useSelector(selectors.userInfoUser);
   const history = useHistory();
-  const data = useSelector((state) => state.orderInfo.data);
+  const data = useSelector(selectors.orderInfoData);
 
   useEffect(() => {
     dispatch({

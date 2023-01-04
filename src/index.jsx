@@ -50,3 +50,5 @@ root.render(
     </BrowserRouter>
   </React.StrictMode>
 );
+
+export * as selectors from "./utils/selectors";

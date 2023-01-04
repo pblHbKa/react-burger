@@ -6,12 +6,13 @@ import { useEffect } from "react";
 import { ModalOverlay } from "../modal-overlay/modal-overlay";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { selectors } from "../..";
 
 const modalRoot = document.getElementById("root");
 
 const Modal = ({ closeModal, title, children }) => {
   const { id } = useParams();
-  const orderInfo = useSelector((state) => state.orderInfo.data);
+  const orderInfo = useSelector(selectors.orderInfoData);
   if (id !== undefined) {
     const order = orderInfo.find((order) => order._id === id);
     title = `#${order.number}`;

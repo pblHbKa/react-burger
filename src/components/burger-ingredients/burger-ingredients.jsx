@@ -8,9 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useInView } from "react-intersection-observer";
 import { getIngredients } from "../../services/actions/burger-ingredients";
 import { setIngredientOpen } from "../../services/reduces/ingredient-open";
+import { selectors } from "../..";
 
 export const BurgerIngredients = () => {
-  const data = useSelector((state) => state.burgerIngredients.data);
+  const data = useSelector(selectors.burgerIngredientsData);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -62,7 +63,7 @@ export const BurgerIngredients = () => {
     ["main", "Начинки"],
   ];
 
-  const ingredientOpen = useSelector((state) => state.ingredientOpen.ingredient);
+  const ingredientOpen = useSelector(selectors.ingredientOpenIngredient);
 
   const handlerTabClick = (tab) => {
     setCurrent(tab);

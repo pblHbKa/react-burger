@@ -9,10 +9,11 @@ import profileStyles from "./profile.module.css";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signOut, updateUserInfo, getUserInfo } from "../../services/actions/user";
+import { selectors } from "../..";
 
 export const Profile = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.userInfo.user);
+  const user = useSelector(selectors.userInfoUser);
   const history = useHistory();
 
   const [email, setEmail] = useState(user.email);

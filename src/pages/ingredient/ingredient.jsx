@@ -3,9 +3,10 @@ import { IngredientDetails } from "../../components/ingredient-details/ingredien
 import { useSelector } from "react-redux";
 import ingredientStyles from "./ingredient.module.css";
 import PropTypes from "prop-types";
+import { selectors } from "../..";
 
 export const Ingredient = ({title}) => {
-  const ingredients = useSelector((state) => state.burgerIngredients.data);
+  const ingredients = useSelector(selectors.burgerIngredientsData);
   const { idIngredient } = useParams();
   const ingredient = ingredients.find(
     (ingredient) => ingredient._id === idIngredient

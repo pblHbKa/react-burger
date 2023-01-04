@@ -4,10 +4,11 @@ import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useMemo, useEffect } from "react";
+import { selectors } from "../..";
 
 export const OrderInfo = ({ fullPage }) => {
-  const orderInfo = useSelector((state) => state.orderInfo.data);
-  const ingredientsData = useSelector((state) => state.burgerIngredients.data);
+  const orderInfo = useSelector(selectors.orderInfoData);
+  const ingredientsData = useSelector(selectors.burgerIngredientsData);
   const { id } = useParams();
   const order = orderInfo.find((order) => order._id === id);
   const dispatch = useDispatch();

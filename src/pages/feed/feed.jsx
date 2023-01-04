@@ -4,12 +4,13 @@ import { OrdersProcessing } from "../../components/orders-processing/orders-proc
 import { useDispatch, useSelector } from "react-redux";
 import { connectionStart } from "../../services/reduces/wsReducers";
 import { useEffect } from "react";
+import { selectors } from "../..";
 
 export const Feed = () => {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.orderInfo.data);
-  const total = useSelector((state) => state.orderInfo.total);
-  const totalToday = useSelector((state) => state.orderInfo.totalToday);
+  const data = useSelector(selectors.orderInfoData);
+  const total = useSelector(selectors.orderInfoTotal);
+  const totalToday = useSelector(selectors.orderInfoTotalToday);
 
   useEffect(() => {
     dispatch({
@@ -32,7 +33,7 @@ export const Feed = () => {
         Лента заказов
       </h1>
       <main className={feedStyles.main}>
-        {data.length && (<>
+        {data.length > 0 && (<>
         <FeedList data={data} />
         <OrdersProcessing data={data} total={total} totalToday={totalToday}/>
         </>)}
