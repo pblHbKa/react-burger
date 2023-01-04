@@ -20,18 +20,21 @@ import { createOrder } from "../../services/actions/burger-constructor";
 import { Loader } from "../loader/loader";
 import { useHistory } from "react-router-dom";
 import { getCookie } from "../../utils/cookies";
+import { selectors } from "../..";
 
 export const BurgerConstructor = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const orderNumber = useSelector((state) => state.order.number);
+
+
+  const orderNumber = useSelector(selectors.orderNumber);
   const token = getCookie("accessToken");
 
   const closeOrderInfo = () => {
     dispatch(setOrder(null));
   };
 
-  const data = useSelector((state) => state.burgerConstructor.data);
+  const data = useSelector(selectors.burgerConstructorData);
   const [isOrderLoad, setIsOrderLoad] = useState(false);
 
   const totalPrice = useMemo(() => {

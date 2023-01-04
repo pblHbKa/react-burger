@@ -6,13 +6,14 @@ import { useDrag } from 'react-dnd';
 import { moveIngredient, deleteIngredient } from "../../services/reduces/burger-constructor";
 import { useDispatch, useSelector } from "react-redux";
 import { decreaseCount } from "../../services/reduces/burger-ingredients";
+import { selectors } from "../..";
 
 
 export const ConstructorCard = ({type, el}) => {
 
     const dispatch = useDispatch();
 
-    const constructorData = useSelector((state) => state.burgerConstructor.data);
+    const constructorData = useSelector(selectors.burgerConstructorData);
 
     const delIngredient = (el) => {
       dispatch(deleteIngredient(el.uuid));

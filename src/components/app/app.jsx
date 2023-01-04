@@ -7,14 +7,16 @@ import { ResetPassword } from "../../pages/reset-password/reset-password";
 import { Main } from "../../pages/main/main";
 import { Profile } from "../../pages/profile/profile";
 import { ProtectedRoute } from "../protectedRoute/protectedRoute";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Ingredient } from "../../pages/ingredient/ingredient";
-import { ProvideAuth, useAuth } from "../../services/reduces/user";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Modal } from "../modal/modal";
 import { getIngredients } from "../../services/actions/burger-ingredients";
 import { AppHeader } from "../app-header/app-header";
 import { getUserInfo } from "../../services/actions/user";
+import { Feed } from "../../pages/feed/feed";
+import { OrderInfo } from "../order-info/order-info";
+import { ProfileOrders } from "../../pages/profile-orders/profile-orders";
 
 function App() {
   const dispatch = useDispatch();
@@ -53,22 +55,41 @@ function App() {
         <ProtectedRoute onlyUnAuth path="/reset-password">
           <ResetPassword />
         </ProtectedRoute>
-        <ProtectedRoute path="/profile">
+        <ProtectedRoute path="/profile" exact>
           <Profile />
+        </ProtectedRoute>
+        <ProtectedRoute path="/profile/orders" exact>
+          <ProfileOrders />
+        </ProtectedRoute>
+        <ProtectedRoute path="/profile/orders/:id">
+          <OrderInfo fullPage/>
         </ProtectedRoute>
         <Route path="/ingredients/:idIngredient">
           <Ingredient title="Детали ингредиента" />
+        </Route>
+        <Route path="/feed/:id">
+          <OrderInfo fullPage/>
+        </Route>
+        <Route path="/feed">
+          <Feed />
         </Route>
         <Route path="*">
           <Error404 />
         </Route>
       </Switch>
       {background && (
-        <Route path="/ingredients/:idIngredient">
-          <Modal closeModal={onModalClose} title="Детали ингредиента">
-            <Ingredient />
-          </Modal>
-        </Route>
+        <>
+          <Route path="/ingredients/:idIngredient">
+            <Modal closeModal={onModalClose} title="Детали ингредиента">
+              <Ingredient />
+            </Modal>
+          </Route>
+          <Route path="/feed/:id">
+            <Modal closeModal={onModalClose}>
+              <OrderInfo />
+            </Modal>
+          </Route>
+        </>
       )}
     </>
   );

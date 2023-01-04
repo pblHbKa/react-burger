@@ -8,12 +8,13 @@ import userInStyles from "../userIn.module.css";
 import { useState } from "react";
 import { signIn } from "../../services/actions/user";
 import { useDispatch, useSelector } from "react-redux";
+import { selectors } from "../..";
 
 export const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.userInfo.user);
+  const user = useSelector(selectors.userInfoUser);
   const history = useHistory();
 
   const handleChange = (event) => {

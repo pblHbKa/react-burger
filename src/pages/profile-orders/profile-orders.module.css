@@ -1,0 +1,22 @@
+.link {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.linkPanel {
+    display: flex;
+    flex-direction: column;
+}
+
+.main {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    max-width: 1240px;
+    gap: 60px;
+    margin: 0 auto;
+    margin-top: 120px;
+}
+
+.exitButton {
+    text-align: left;
+}
