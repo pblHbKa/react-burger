@@ -2,9 +2,10 @@ import feedStyles from "./feed.module.css";
 import { FeedList } from "../../components/feed-list/feed-list";
 import { OrdersProcessing } from "../../components/orders-processing/orders-processing";
 import { useDispatch, useSelector } from "react-redux";
-import { connectionStart } from "../../services/reduces/wsReducers";
+import { wsInit, connectionClose } from "../../services/reduces/wsReducers";
 import { useEffect } from "react";
 import { selectors } from "../..";
+import { BURGER_WS_ORDERS } from "../../utils/burger-api";
 
 export const Feed = () => {
   const dispatch = useDispatch();
@@ -13,17 +14,12 @@ export const Feed = () => {
   const totalToday = useSelector(selectors.orderInfoTotalToday);
 
   useEffect(() => {
-    dispatch({
-      type: "WS_CONNECTION_START",
-      payload: {
-        url: "wss://norma.nomoreparties.space/orders/all",
-        isAuth: true,
-      },
-    });
+    dispatch(wsInit({
+          url: `${BURGER_WS_ORDERS}/all`,
+          isAuth: false,
+        }));
     return () => {
-      dispatch({
-        type: "WS_CONNECTION_STOP",
-      });
+      dispatch(connectionClose())
     };
   }, [dispatch]);
 

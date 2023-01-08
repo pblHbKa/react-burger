@@ -1,4 +1,5 @@
 const BURGER_API_URL = "https://norma.nomoreparties.space/api";
+export const BURGER_WS_ORDERS = "wss://norma.nomoreparties.space/orders";
 
 export function createOrder(ingredients, token) {
   return request(`${BURGER_API_URL}/orders`, {

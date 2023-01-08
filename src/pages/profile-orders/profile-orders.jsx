@@ -3,11 +3,13 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { NavLink, useHistory } from "react-router-dom";
 import profileOrdersStyles from "./profile-orders.module.css";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { signOut, updateUserInfo, getUserInfo } from "../../services/actions/user";
+import { signOut } from "../../services/actions/user";
 import { FeedList } from "../../components/feed-list/feed-list";
 import { selectors } from "../..";
+import { wsInit, connectionClose } from "../../services/reduces/wsReducers";
+import { BURGER_WS_ORDERS } from "../../utils/burger-api";
 
 export const ProfileOrders = () => {
   const dispatch = useDispatch();
@@ -16,17 +18,12 @@ export const ProfileOrders = () => {
   const data = useSelector(selectors.orderInfoData);
 
   useEffect(() => {
-    dispatch({
-      type: "WS_CONNECTION_START",
-      payload: {
-        url: "wss://norma.nomoreparties.space/orders",
-        isAuth: true,
-      },
-    });
+    dispatch(wsInit({
+      url: BURGER_WS_ORDERS,
+      isAuth: true,
+    }));
     return () => {
-      dispatch({
-        type: "WS_CONNECTION_STOP",
-      });
+      dispatch(connectionClose())
     };
   }, [dispatch]);
 

@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useMemo, useEffect } from "react";
 import { selectors } from "../..";
+import { wsInit, connectionClose } from "../../services/reduces/wsReducers";
+import { BURGER_WS_ORDERS } from "../../utils/burger-api";
 
 export const OrderInfo = ({ fullPage }) => {
   const orderInfo = useSelector(selectors.orderInfoData);
@@ -27,17 +29,12 @@ export const OrderInfo = ({ fullPage }) => {
   const dateFromServer = order?.createdAt;
 
   useEffect(() => {
-    dispatch({
-      type: "WS_CONNECTION_START",
-      payload: {
-        url: "wss://norma.nomoreparties.space/orders/all",
-        isAuth: true,
-      },
-    });
+    dispatch(wsInit({
+      url: `${BURGER_WS_ORDERS}/all`,
+      isAuth: false,
+    }));
     return () => {
-      dispatch({
-        type: "WS_CONNECTION_STOP",
-      });
+      dispatch(connectionClose())
     };
   }, [dispatch]);
 
