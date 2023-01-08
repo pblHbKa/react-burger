@@ -20,7 +20,6 @@ import { createSlice } from "@reduxjs/toolkit";
       },
       connectionClose: (state, action) => {
         state.wsConnected = false;
-        state.data = [];
         state.wsInit = false;
       },
       connectionGetData: (state, action) => {

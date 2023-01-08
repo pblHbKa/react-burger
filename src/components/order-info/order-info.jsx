@@ -16,9 +16,17 @@ export const OrderInfo = ({ fullPage }) => {
   const dispatch = useDispatch();
 
   const {ingredients, totalPrice} = useMemo(() => {
-    const ingredients = order?.ingredients.map((el) =>
-      ingredientsData.find((ingredient) => ingredient._id === el)
+    let ingredientsUniq = new Map();
+    let ingredients = [];
+    order?.ingredients.forEach((el) =>
+      {const elData = ingredientsData.find((ingredient) => ingredient._id === el);
+        ingredientsUniq.set(elData, ingredientsUniq.get(elData) === undefined ? 1 : ingredientsUniq.get(elData) + 1)
+      }
     );
+    for (const [key, value] of ingredientsUniq) {
+      ingredients.push({...key, count: value})
+    }
+    console.log(ingredients);
     const totalPrice = ingredients === undefined ?  0 : ingredients.reduce(
       (prev, el) => prev + el.price,
       0
@@ -77,7 +85,7 @@ export const OrderInfo = ({ fullPage }) => {
                   <p
                     className={`text text_type_digits-default ${orderInfoStyles.totalPrice}`}
                   >
-                    {ingredient.price}
+                    {ingredient.count === 1 ? ingredient.price : `${ingredient.count} X ${ingredient.price}`}
                   </p>
                   <CurrencyIcon type="primary" />
                 </div>
