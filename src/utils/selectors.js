@@ -1,5 +1,6 @@
 export const orderNumber = state => state.order.number;
-export const burgerConstructorData = state => state.burgerConstructor.data;
+export const burgerConstructorIngredients = state => state.burgerConstructor.ingredients;
+export const burgerConstructorBun = state => state.burgerConstructor.bun;
 export const burgerIngredientsData = state => state.burgerIngredients.data;
 export const ingredientOpenIngredient = state => state.ingredientOpen.ingredient;
 export const orderInfoData = state => state.orderInfo.data;

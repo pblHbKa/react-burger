@@ -13,7 +13,7 @@ export const ConstructorCard = ({type, el}) => {
 
     const dispatch = useDispatch();
 
-    const constructorData = useSelector(selectors.burgerConstructorData);
+    const constructorData = useSelector(selectors.burgerConstructorIngredients);
 
     const delIngredient = (el) => {
       dispatch(deleteIngredient(el.uuid));
