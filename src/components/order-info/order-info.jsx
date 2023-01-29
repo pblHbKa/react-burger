@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useMemo, useEffect } from "react";
 import { selectors } from "../..";
+import { wsInit, connectionClose } from "../../services/reduces/wsReducers";
+import { BURGER_WS_ORDERS } from "../../utils/burger-api";
 
 export const OrderInfo = ({ fullPage }) => {
   const orderInfo = useSelector(selectors.orderInfoData);
@@ -14,9 +16,17 @@ export const OrderInfo = ({ fullPage }) => {
   const dispatch = useDispatch();
 
   const {ingredients, totalPrice} = useMemo(() => {
-    const ingredients = order?.ingredients.map((el) =>
-      ingredientsData.find((ingredient) => ingredient._id === el)
+    let ingredientsUniq = new Map();
+    let ingredients = [];
+    order?.ingredients.forEach((el) =>
+      {const elData = ingredientsData.find((ingredient) => ingredient._id === el);
+        ingredientsUniq.set(elData, ingredientsUniq.get(elData) === undefined ? 1 : ingredientsUniq.get(elData) + 1)
+      }
     );
+    for (const [key, value] of ingredientsUniq) {
+      ingredients.push({...key, count: value})
+    }
+    console.log(ingredients);
     const totalPrice = ingredients === undefined ?  0 : ingredients.reduce(
       (prev, el) => prev + el.price,
       0
@@ -27,17 +37,12 @@ export const OrderInfo = ({ fullPage }) => {
   const dateFromServer = order?.createdAt;
 
   useEffect(() => {
-    dispatch({
-      type: "WS_CONNECTION_START",
-      payload: {
-        url: "wss://norma.nomoreparties.space/orders/all",
-        isAuth: true,
-      },
-    });
+    dispatch(wsInit({
+      url: `${BURGER_WS_ORDERS}/all`,
+      isAuth: false,
+    }));
     return () => {
-      dispatch({
-        type: "WS_CONNECTION_STOP",
-      });
+      dispatch(connectionClose())
     };
   }, [dispatch]);
 
@@ -80,7 +85,7 @@ export const OrderInfo = ({ fullPage }) => {
                   <p
                     className={`text text_type_digits-default ${orderInfoStyles.totalPrice}`}
                   >
-                    {ingredient.price}
+                    {ingredient.count === 1 ? ingredient.price : `${ingredient.count} X ${ingredient.price}`}
                   </p>
                   <CurrencyIcon type="primary" />
                 </div>

@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 
 const initialState = {
-  data: [],
+  ingredients: [],
+  bun: undefined,
 };
 
 const burgerConstructor = createSlice({
@@ -10,39 +11,40 @@ const burgerConstructor = createSlice({
   initialState,
   reducers: {
     setData: (state, action) => {
-      state.data = action.payload.map((item, index) => ({
+      state.ingredients = action.payload.filter((item) => item.type !== "bun").map((item, index) => ({
         ...item,
         uuid: Math.random().toString(36).slice(2),
         position: index,
       }));
+      state.bun = action.payload.find(item => item.type === "bun");
     },
     addIngredient: (state, action) => {
-      if (action.payload.type === "bun") {
-        state.data = state.data.filter((item) => item.type !== "bun");
-      }
-      state.data = [
-        ...state.data,
+      state.ingredients = [
+        ...state.ingredients,
         {
           ...action.payload,
           uuid: Math.random().toString(36).slice(2),
-          position: state.data.length,
+          position: state.ingredients.length,
         },
       ];
     },
+    addBun: (state, action) => {
+      state.bun = action.payload;
+    },
     deleteIngredient: (state, action) => {
-      state.data = state.data.filter((item) => item.uuid !== action.payload);
+      state.ingredients = state.ingredients.filter((item) => item.uuid !== action.payload);
     },
     moveIngredient: (state, action) => {
       const hoverIndex = action.payload.hoverIndex;
       const dragIndex = action.payload.dragIndex;
-      let newArr = state.data;
+      let newArr = state.ingredients;
       newArr.splice(dragIndex, 1);
       newArr.splice(hoverIndex, 0, action.payload.item);
-      state.data = newArr;
+      state.ingredients = newArr;
     },
   },
 });
 
 export const { reducer } = burgerConstructor;
-export const { setData, addIngredient, deleteIngredient, moveIngredient} =
+export const { setData, addIngredient, addBun, deleteIngredient, moveIngredient} =
   burgerConstructor.actions;

@@ -9,7 +9,7 @@ import { Modal } from "../modal/modal";
 import { OrderDetails } from "../order-details/order-details";
 import { useDispatch, useSelector } from "react-redux";
 import { setOrder } from "../../services/reduces/order";
-import { addIngredient } from "../../services/reduces/burger-constructor";
+import { addIngredient, addBun } from "../../services/reduces/burger-constructor";
 import { useDrop } from "react-dnd/dist/hooks/useDrop";
 import {
   increaseCount,
@@ -34,30 +34,24 @@ export const BurgerConstructor = () => {
     dispatch(setOrder(null));
   };
 
-  const data = useSelector(selectors.burgerConstructorData);
+  const ingredients = useSelector(selectors.burgerConstructorIngredients);
+  const bun = useSelector(selectors.burgerConstructorBun);
   const [isOrderLoad, setIsOrderLoad] = useState(false);
 
   const totalPrice = useMemo(() => {
-    return data.reduce(
-      (prev, el) => prev + el.price * (el.type === "bun" ? 2 : 1),
+    return ingredients.reduce(
+      (prev, el) => prev + el.price,
       0
-    );
-  }, [data]);
-
-  const ingredientsGroup = useMemo(() => {
-    const buns = data.filter((ingredient) => ingredient.type === "bun");
-    const bun = buns.length ? buns[0] : null;
-    const ingredients = data.filter((ingredient) => ingredient.type !== "bun");
-    return { bun, ingredients };
-  }, [data]);
+    ) + (bun ? bun.price * 2 : 0);
+  }, [ingredients, bun]);
 
   const placeOrder = () => {
     if (token) {
       setIsOrderLoad(true);
       const ingredientsId = [
-        ingredientsGroup.bun._id,
-        ...ingredientsGroup.ingredients.map((el) => el._id),
-        ingredientsGroup.bun._id,
+        bun._id,
+        ...ingredients.map((el) => el._id),
+        bun._id,
       ];
       dispatch(createOrder(ingredientsId))
       .finally(() => setIsOrderLoad(false));
@@ -69,11 +63,13 @@ export const BurgerConstructor = () => {
   const [, dropTarget] = useDrop({
     accept: "ingredient",
     drop(item) {
-      dispatch(addIngredient(item));
-      dispatch(increaseCount(item._id));
       if (item.type === "bun") {
+        dispatch(addBun(item));
         dispatch(bunChange(item._id));
+      } else {
+        dispatch(addIngredient(item));
       }
+      dispatch(increaseCount(item._id));
     },
   });
 
@@ -84,24 +80,24 @@ export const BurgerConstructor = () => {
           className={burgerConstructorStyles.constructorBox}
           ref={dropTarget}
         >
-          {data.length > 0 && (
+          {(ingredients.length > 0 || bun) && (
             <div className="pl-10 pr-10 pt-25 mb-10 ml-40">
-              {ingredientsGroup.bun && (
+              {bun && (
                 <div
                   className={`ml-8 ${burgerConstructorStyles.constructorElement}`}
-                  key={`${ingredientsGroup.bun._id}_top`}
+                  key={`${bun._id}_top`}
                 >
                   <ConstructorElement
                     type="top"
                     isLocked={true}
-                    text={`${ingredientsGroup.bun.name} верх`}
-                    price={ingredientsGroup.bun.price}
-                    thumbnail={ingredientsGroup.bun.image}
+                    text={`${bun.name} верх`}
+                    price={bun.price}
+                    thumbnail={bun.image}
                   />
                 </div>
               )}
               <ul className={burgerConstructorStyles.ul}>
-                {ingredientsGroup.ingredients.map((el) => {
+                {ingredients.map((el) => {
                   return (
                     <li key={el.uuid}>
                       <ConstructorCard type={"primary"} el={el} />
@@ -109,17 +105,17 @@ export const BurgerConstructor = () => {
                   );
                 })}
               </ul>
-              {ingredientsGroup.bun && (
+              {bun && (
                 <div
                   className="ml-8"
-                  key={`${ingredientsGroup.bun._id}_bottom`}
+                  key={`${bun._id}_bottom`}
                 >
                   <ConstructorElement
                     type="bottom"
                     isLocked={true}
-                    text={`${ingredientsGroup.bun.name} низ`}
-                    price={ingredientsGroup.bun.price}
-                    thumbnail={ingredientsGroup.bun.image}
+                    text={`${bun.name} низ`}
+                    price={bun.price}
+                    thumbnail={bun.image}
                   />
                 </div>
               )}
@@ -132,7 +128,7 @@ export const BurgerConstructor = () => {
                   </p>
                   <CurrencyIcon type="primary" />
                 </div>
-                {ingredientsGroup.bun && (
+                {bun && (
                   <Button
                     htmlType="button"
                     type="primary"
@@ -147,7 +143,7 @@ export const BurgerConstructor = () => {
               </div>
             </div>
           )}
-          {data.length === 0 && (
+          {(ingredients.length === 0 && bun === undefined) && (
             <div className={burgerConstructorStyles.initialTextBox}>
               <h2 className="text text_type_main-medium">
                 Перетащи сюда ингредиенты

@@ -15,7 +15,9 @@ const Modal = ({ closeModal, title, children }) => {
   const orderInfo = useSelector(selectors.orderInfoData);
   if (id !== undefined) {
     const order = orderInfo.find((order) => order._id === id);
-    title = `#${order.number}`;
+    if (order !== undefined) {
+      title = `#${order.number}`;
+    }
   }
 
   useEffect(() => {
