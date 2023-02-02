@@ -18,6 +18,7 @@ import { OrderInfo } from "../order-info/order-info";
 import { ProfileOrders } from "../../pages/profile-orders/profile-orders";
 import { useAppDispatch } from "../..";
 import { ILocationState } from "../../services/types/data";
+import { useParams } from "react-router-dom";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -59,11 +60,11 @@ function App() {
         <ProtectedRoute onlyUnAuth={false} path="/profile" exact>
           <Profile />
         </ProtectedRoute>
+        <ProtectedRoute onlyUnAuth={false} path="/profile/orders/:id" exact>
+          <OrderInfo fullPage/>
+        </ProtectedRoute>
         <ProtectedRoute onlyUnAuth={false} path="/profile/orders" exact>
           <ProfileOrders />
-        </ProtectedRoute>
-        <ProtectedRoute onlyUnAuth={false} path="/profile/orders/:id" exact={false}>
-          <OrderInfo fullPage/>
         </ProtectedRoute>
         <Route path="/ingredients/:idIngredient">
           <Ingredient title="Детали ингредиента" />
@@ -83,6 +84,11 @@ function App() {
           <Route path="/ingredients/:idIngredient">
             <Modal closeModal={onModalClose} title="Детали ингредиента">
               <Ingredient />
+            </Modal>
+          </Route>
+          <Route path="/profile/orders/:idIngredient">
+            <Modal closeModal={onModalClose}>
+              <OrderInfo fullPage={false}/>
             </Modal>
           </Route>
           <Route path="/feed/:id">

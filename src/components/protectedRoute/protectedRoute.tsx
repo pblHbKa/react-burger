@@ -7,7 +7,7 @@ interface IProtectedRouteProps {
   onlyUnAuth: boolean;
   children?: React.ReactNode;
   path: string;
-  exact: boolean;
+  exact?: boolean;
 }
 
 export const ProtectedRoute: React.FC<IProtectedRouteProps> = ({ onlyUnAuth, children, ...props }) => {

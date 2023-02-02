@@ -20,7 +20,7 @@ import { Loader } from "../loader/loader";
 import { useHistory } from "react-router-dom";
 import { getCookie } from "../../utils/cookies";
 import { selectors, useAppDispatch, useAppSelector } from "../..";
-import { TIngredient } from "../../services/types/data";
+import { IIngredient } from "../../services/types/data";
 
 export const BurgerConstructor = () => {
   const dispatch = useAppDispatch();
@@ -40,7 +40,7 @@ export const BurgerConstructor = () => {
 
   const totalPrice = useMemo(() => {
     return ingredients.reduce(
-      (prev:number, el:TIngredient) => prev + el.price,
+      (prev, el) => prev + el.price,
       0
     ) + (bun ? bun.price * 2 : 0);
   }, [ingredients, bun]);
@@ -50,7 +50,7 @@ export const BurgerConstructor = () => {
       setIsOrderLoad(true);
       const ingredientsId = [
         bun._id,
-        ...ingredients.map((el:TIngredient) => el._id),
+        ...ingredients.map((el) => el._id),
         bun._id,
       ];
       dispatch(createOrder(ingredientsId))
@@ -62,7 +62,7 @@ export const BurgerConstructor = () => {
 
   const [, dropTarget] = useDrop({
     accept: "ingredient",
-    drop(item:TIngredient) {
+    drop(item:IIngredient) {
       if (item.type === "bun") {
         dispatch(addBun(item));
         dispatch(bunChange(item._id));

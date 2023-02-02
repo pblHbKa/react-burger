@@ -5,10 +5,10 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useDrag } from "react-dnd/dist/hooks";
 import { Link, useLocation } from "react-router-dom";
-import { TIngredient } from "../../services/types/data";
+import { IIngredient } from "../../services/types/data";
 
 interface IIngredientCardProps {
-  ingredient: TIngredient;
+  ingredient: IIngredient;
 }
 
 export const IngredientCard: React.FC<IIngredientCardProps> = ({ ingredient }) => {

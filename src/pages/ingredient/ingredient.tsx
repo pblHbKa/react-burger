@@ -3,7 +3,6 @@ import { IngredientDetails } from "../../components/ingredient-details/ingredien
 import ingredientStyles from "./ingredient.module.css";
 import PropTypes from "prop-types";
 import { selectors, useAppSelector } from "../..";
-import { TIngredient } from "../../services/types/data";
 
 interface IIngredientProps {
   title?: string;

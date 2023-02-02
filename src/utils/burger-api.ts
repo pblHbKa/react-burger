@@ -1,5 +1,5 @@
-import { TResponse, TToken } from "../services/types/common";
-import { TUserInfo } from "../services/types/data";
+import { TToken } from "../services/types/common";
+import { IUserInfo } from "../services/types/data";
 
 const BURGER_API_URL = "https://norma.nomoreparties.space/api";
 export const BURGER_WS_ORDERS = "wss://norma.nomoreparties.space/orders";
@@ -42,7 +42,7 @@ export function setPassword(password: string, token: TToken) {
   });
 }
 
-export function createUser({ email, password, name }: TUserInfo) {
+export function createUser({ email, password, name }: IUserInfo) {
   return request(`${BURGER_API_URL}/auth/register`, {
     method: "POST",
     headers: {
@@ -101,7 +101,7 @@ export function getUserInfo(token: TToken) {
      }});
 }
 
-export function updateUserInfo(token: TToken, { name, email, password }: TUserInfo) {
+export function updateUserInfo(token: TToken, { name, email, password }: IUserInfo) {
   return request(`${BURGER_API_URL}/auth/user`, {
     method: "PATCH",
     headers: {
@@ -113,10 +113,10 @@ export function updateUserInfo(token: TToken, { name, email, password }: TUserIn
   });
 }
 
-function request(url: string, options?: {}) {
+function request(url: string, options?: RequestInit) {
   return fetch(url, options).then(checkResponse);
 }
 
-const checkResponse = (res: TResponse) => {
+const checkResponse = (res: Response) => {
   return res.ok ? res.json() : res.json().then((err: string) => Promise.reject(err));
 };

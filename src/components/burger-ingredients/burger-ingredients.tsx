@@ -4,19 +4,14 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Modal } from "../modal/modal";
 import { IngredientDetails } from "../ingredient-details/ingredient-details";
 import { IngredientsCategory } from "../ingredients-category/ingredients-category";
-import { InView, InViewHookResponse, useInView } from "react-intersection-observer";
-import { getIngredients } from "../../services/actions/burger-ingredients";
+import { InViewHookResponse, useInView } from "react-intersection-observer";
 import { setIngredientOpen } from "../../services/reduces/ingredient-open";
 import { selectors, useAppDispatch, useAppSelector } from "../..";
-import { TIngredient } from "../../services/types/data";
+import { IIngredient } from "../../services/types/data";
 
 export const BurgerIngredients = () => {
   const data = useAppSelector(state => state.burgerIngredients.data);
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(getIngredients());
-  }, []);
 
   const [current, setCurrent] = useState("bun");
   const [bunsRef, inViewBuns]: InViewHookResponse = useInView({
@@ -42,15 +37,15 @@ export const BurgerIngredients = () => {
 
   const ingredientsGroups = useMemo(() => {
     const buns = {
-      data: data.filter((item:TIngredient) => item.type === "bun"),
+      data: data.filter((item) => item.type === "bun"),
       ref: bunsRef,
     };
     const mains = {
-      data: data.filter((item:TIngredient) => item.type === "main"),
+      data: data.filter((item) => item.type === "main"),
       ref: mainsRef,
     };
     const sauces = {
-      data: data.filter((item:TIngredient) => item.type === "sauce"),
+      data: data.filter((item) => item.type === "sauce"),
       ref: saucesRef,
     };
 
@@ -74,7 +69,7 @@ export const BurgerIngredients = () => {
     dispatch(setIngredientOpen(null));
   };
 
-  const openIngredient = (data:TIngredient) => {
+  const openIngredient = (data:IIngredient) => {
     dispatch(setIngredientOpen(data));
   };
 

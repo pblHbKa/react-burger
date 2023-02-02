@@ -1,12 +1,12 @@
 import ingredientsCategoryStyles from "./ingredients-category.module.css";
 import { forwardRef } from "react";
 import { IngredientCard } from "../ingredient-card/ingredient-card";
-import { TIngredient } from "../../services/types/data";
+import { IIngredient } from "../../services/types/data";
 
 interface IIngredientsCategoryProps {
   categoryId: string;
   categoryName: string;
-  group: Array<TIngredient>;
+  group: Array<IIngredient>;
   ref: React.Ref<HTMLDivElement>;
 }
 

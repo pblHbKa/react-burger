@@ -9,7 +9,7 @@ import {
 import { clearUserInfo, setUserInfo } from "../reduces/user";
 import { setCookie, getCookie, deleteCookie } from "../../utils/cookies";
 import { AppDispatch } from "../..";
-import { TUserInfo } from "../types/data";
+import { IUserInfo } from "../types/data";
 import { TToken } from "../types/common";
 
 export function getUserInfo() {
@@ -74,22 +74,26 @@ export function signOut() {
         deleteCookie("accessToken");
         deleteCookie("refreshToken");
       }
-    });
+    })
+    .catch(err => console.log(err)
+    );
   };
 }
 
-export function updateUserInfo(userData: TUserInfo) {
+export function updateUserInfo(userData: IUserInfo) {
   return function (dispatch: AppDispatch) {
     const token: TToken = getCookie("accessToken");
     return updateUserInfoAPI(token, userData).then((res) => {
       if (res.success) {
         dispatch(setUserInfo(res.user));
       }
-    });
+    })
+    .catch(err => console.log(err)
+    );
   };
 }
 
-export function createUser(userData: TUserInfo) {
+export function createUser(userData: IUserInfo) {
   return function (dispatch: AppDispatch) {
     return createUserAPI(userData).then((res) => {
       if (res.success) {
@@ -99,6 +103,9 @@ export function createUser(userData: TUserInfo) {
         setCookie("refreshToken", refreshToken);
         dispatch(setUserInfo(res.user));
       }
-    });
+    })
+    .catch((err) => {
+      console.log(err);
+    })
   };
 }

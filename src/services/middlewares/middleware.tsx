@@ -1,11 +1,11 @@
+import { Middleware } from "redux";
 import { getCookie } from "../../utils/cookies";
-import { connectionStart,
-  connectionClose,
-  connectionGetData, wsInit } from "../reduces/wsReducers"
+import { IwsActions } from "../reduces/wsReducers"
 
-export const socketMiddleware = (wsActions) => {
+export const socketMiddleware = (wsActions: IwsActions): Middleware => {
     return store => {
-      let socket = null;
+      let socket: WebSocket|null = null;
+      const { connectionStart, connectionClose, connectionGetData, wsInit } = wsActions;
   
       return next => action => {
         const token = getCookie("accessToken");
@@ -35,7 +35,7 @@ export const socketMiddleware = (wsActions) => {
           };
   
           socket.onclose = event => {
-            socket.close('1000', 'socket close');
+            socket!.close(1000, 'socket close');
             dispatch(connectionClose());
           };
         }

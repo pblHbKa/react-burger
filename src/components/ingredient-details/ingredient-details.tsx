@@ -1,8 +1,8 @@
 import ingredientsDetailsStyles from "./ingredient-details.module.css";
-import { TIngredient } from "../../services/types/data";
+import { IIngredient } from "../../services/types/data";
 
 interface IIngredientDetailsProps {
-  data: TIngredient;
+  data: IIngredient;
 }
 
 export const IngredientDetails: React.FC<IIngredientDetailsProps> = (props) => {

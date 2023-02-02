@@ -6,11 +6,11 @@ import { DropTargetMonitor, useDrag } from 'react-dnd';
 import { moveIngredient, deleteIngredient } from "../../services/reduces/burger-constructor";
 import { decreaseCount } from "../../services/reduces/burger-ingredients";
 import { selectors, useAppDispatch, useAppSelector } from "../..";
-import { TIngredient } from "../../services/types/data";
+import { IIngredient } from "../../services/types/data";
 
 interface IConstCardProps {
   type: string;
-  el: TIngredient;
+  el: IIngredient;
 }
 
 export const ConstructorCard: React.FC<IConstCardProps> = ({type, el}) => {
@@ -19,13 +19,13 @@ export const ConstructorCard: React.FC<IConstCardProps> = ({type, el}) => {
 
     const constructorData = useAppSelector(state => state.burgerConstructor.ingredients);
 
-    const delIngredient = (el:TIngredient) => {
+    const delIngredient = (el:IIngredient) => {
       dispatch(deleteIngredient(el.uuid));
       dispatch(decreaseCount(el._id));
     };
 
     const ref = useRef<HTMLInputElement>(null)
-    const [, drop] = useDrop<TIngredient, unknown, {handlerId: string|symbol|null}>({
+    const [, drop] = useDrop<IIngredient, unknown, {handlerId: string|symbol|null}>({
         accept: "constructorCard",
         collect(monitor) {
           return {

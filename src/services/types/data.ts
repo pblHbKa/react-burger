@@ -1,6 +1,6 @@
 import { type } from "@testing-library/user-event/dist/type";
 
-export type TIngredient = {
+export interface IIngredientApi {
     _id: string;
     name: string;
     type: string;
@@ -13,26 +13,14 @@ export type TIngredient = {
     image_mobile: string;
     image_large: string;
     __v: number;
+}
+
+export interface IIngredient extends IIngredientApi {
     uuid: string;
     count: number;
-}
+} 
 
-export type TIngredientApi = {
-    _id: string;
-    name: string;
-    type: string;
-    proteins: number;
-    fat: number;
-    carbohydrates: number;
-    calories: number;
-    price: number;
-    image: string;
-    image_mobile: string;
-    image_large: string;
-    __v: number;
-}
-
-export type TOrder = {
+export interface IOrder {
     ingredients: Array<string>;
     _id: string;
     status: string;
@@ -42,7 +30,7 @@ export type TOrder = {
     name: string;
 }
 
-export type TUserInfo = {
+export interface IUserInfo {
     name: string;
     email: string;
     password: string;

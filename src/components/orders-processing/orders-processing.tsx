@@ -1,8 +1,8 @@
 import ordersProcessingStyles from "./orders-processing.module.css";
-import { TOrder } from "../../services/types/data";
+import { IOrder } from "../../services/types/data";
 
 interface IOrdersProcessingProps {
-  data: Array<TOrder>;
+  data: Array<IOrder>;
   totalToday: number;
   total: number;  
 }

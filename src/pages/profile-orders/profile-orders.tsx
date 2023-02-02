@@ -70,7 +70,7 @@ export const ProfileOrders = () => {
           В этом разделе вы можете просмотреть свою историю заказов
           </p>
         </div>
-        {data && <FeedList data={data}/>}
+        {data && <FeedList data={data} common={false}/>}
       </main>
     </>
   );

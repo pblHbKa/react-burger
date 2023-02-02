@@ -11,18 +11,10 @@ const modalRoot = document.getElementById("root")!;
 interface IModalProps {
   closeModal(): void;
   title?: string;
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 export const Modal: React.FC<IModalProps> = ({ closeModal, title, children }) => {
-  const { id } = useParams<{id?: string}>();
-  const orderInfo = useAppSelector(state => state.orderInfo.data);
-  if (id !== undefined) {
-    const order = orderInfo.find((order) => order._id === id);
-    if (order !== undefined) {
-      title = `#${order.number}`;
-    }
-  }
 
   useEffect(() => {
     const onKeydown = (ev: KeyboardEvent) => {

@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TOrder } from "../types/data";
+import { IOrder } from "../types/data";
 
 interface IOrderInfo {
   wsConnected: boolean,
   wsInit: boolean,
-  data: Array<TOrder>,
+  data: Array<IOrder>,
   total: number,
   totalToday: number
 };
@@ -46,3 +46,10 @@ export const {
   connectionGetData,
   wsInit
 } = orderInfo.actions;
+
+export interface IwsActions {
+  connectionStart: typeof connectionStart,
+  connectionClose: typeof connectionClose,
+  connectionGetData: typeof connectionGetData,
+  wsInit: typeof wsInit
+}

@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TIngredient } from "../types/data";
+import { IIngredient } from "../types/data";
 
 interface IburgerConstructor {
-  ingredients: Array<TIngredient>,
-  bun: undefined | TIngredient,
+  ingredients: Array<IIngredient>,
+  bun: undefined | IIngredient,
 }
 
 const initialState: IburgerConstructor = {
@@ -15,15 +15,15 @@ const burgerConstructor = createSlice({
   name: "burgerConstructor",
   initialState,
   reducers: {
-    setData: (state, action: PayloadAction<Array<TIngredient>>) => {
+    setData: (state, action: PayloadAction<Array<IIngredient>>) => {
       state.ingredients = action.payload.filter((item) => item.type !== "bun").map((item, index: number) => ({
         ...item,
         uuid: Math.random().toString(36).slice(2),
         position: index,
       }));
-      state.bun = action.payload.find((item: TIngredient) => item.type === "bun");
+      state.bun = action.payload.find((item: IIngredient) => item.type === "bun");
     },
-    addIngredient: (state, action: PayloadAction<TIngredient>) => {
+    addIngredient: (state, action: PayloadAction<IIngredient>) => {
       state.ingredients = [
         ...state.ingredients,
         {
@@ -36,7 +36,7 @@ const burgerConstructor = createSlice({
       state.bun = action.payload;
     },
     deleteIngredient: (state, action) => {
-      state.ingredients = state.ingredients.filter((item: TIngredient) => item.uuid !== action.payload);
+      state.ingredients = state.ingredients.filter((item) => item.uuid !== action.payload);
     },
     moveIngredient: (state, action) => {
       const hoverIndex = action.payload.hoverIndex;

@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TIngredient } from "../types/data";
+import { IIngredient } from "../types/data";
 
 interface IIngredientOpen {
-  ingredient: TIngredient | null;
+  ingredient: IIngredient | null;
 };
 
 const initialState: IIngredientOpen = {
@@ -13,7 +13,7 @@ export const ingredientOpen = createSlice({
   name: "ingredientOpen",
   initialState,
   reducers: {
-    setIngredientOpen: (state, action: PayloadAction<TIngredient|null>) => {
+    setIngredientOpen: (state, action: PayloadAction<IIngredient|null>) => {
       state.ingredient = action.payload;
     },
   },

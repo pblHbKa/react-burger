@@ -7,35 +7,26 @@ import {
 import { NavLink, useHistory } from "react-router-dom";
 import profileStyles from "./profile.module.css";
 import { useState, useEffect } from "react";
-import { signOut, updateUserInfo, getUserInfo } from "../../services/actions/user";
+import { signOut, updateUserInfo } from "../../services/actions/user";
 import { selectors, useAppDispatch, useAppSelector } from "../..";
+import { useForm } from "../../utils/hooks/useForm";
 
 export const Profile = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(state => state.userInfo.user);
   const history = useHistory();
 
-  const [email, setEmail] = useState(user.email);
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState(user.name);
-  const [modified, setModified] = useState(false);
+   const [modified, setModified] = useState(false);
+  const {values, handleChange, setValues} = useForm<{email: string; password: string; name: string}>({email: "", password: "", name: ""});
 
   useEffect(() => {
-    setEmail(user.email);
-    setName(user.name);
-    setPassword(user.password);
+    setValues(user);
   }, [user]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.name === "email") {
-      setEmail(event.target.value);
-    } else if (event.target.name === "userName") {
-      setName(event.target.value);
-    } else {
-      setPassword(event.target.value);
-    }
+  const handleChangeLocal = (event: React.ChangeEvent<HTMLInputElement>) => {
+    handleChange(event);
     setModified(true);
-  };
+  }
 
   const logout = () => {
     dispatch(signOut())
@@ -45,14 +36,12 @@ export const Profile = () => {
   };
 
   const resetChanges = () => {
-      setEmail(user.email);
-      setPassword("");
-      setName(user.name);
+    setValues({email: user.email, name: user.name, password: ""});
       setModified(false);
     }
 
   const saveChanges = () => {
-    dispatch(updateUserInfo({ name, email, password }))
+    dispatch(updateUserInfo(values))
     .then(() => {setModified(false)})
   };
 
@@ -97,25 +86,25 @@ export const Profile = () => {
           <Input
             type="text"
             placeholder="Имя"
-            name="userName"
+            name="name"
             icon="EditIcon"
-            value={name}
-            onChange={handleChange}
+            value={values.name}
+            onChange={handleChangeLocal}
           />
           <EmailInput
             isIcon={true}
             placeholder="Логин"
             extraClass="mt-6 mb-6"
             name="email"
-            value={email}
-            onChange={handleChange}
+            value={values.email}
+            onChange={handleChangeLocal}
           />
           <PasswordInput
             placeholder="Пароль"
             name="password"
             icon="EditIcon"
-            value={password}
-            onChange={handleChange}
+            value={values.password}
+            onChange={handleChangeLocal}
           />
           {modified && (
             <>

@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TIngredient } from "../types/data";
+import { IIngredient } from "../types/data";
 
 interface IBurgerIngredients {
-  data: Array<TIngredient>;
+  data: Array<IIngredient>;
 };
 
 const initialState: IBurgerIngredients = {
@@ -13,7 +13,7 @@ const burgerIngredients = createSlice({
   name: "burgerIngredients",
   initialState,
   reducers: {
-    setIngredients: (state, action: PayloadAction<Array<TIngredient>>) => {
+    setIngredients: (state, action: PayloadAction<Array<IIngredient>>) => {
       state.data = action.payload.map((item) => ({ ...item, count: 0 }));
     },
     increaseCount: (state, action: PayloadAction<string>) => {

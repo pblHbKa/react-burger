@@ -5,29 +5,19 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useHistory } from "react-router-dom";
 import userInStyles from "../userIn.module.css";
-import { useState } from "react";
 import { signIn } from "../../services/actions/user";
 import { selectors, useAppDispatch, useAppSelector } from "../..";
+import { useForm } from "../../utils/hooks/useForm";
 
 export const LogIn = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const {values, handleChange, setValues} = useForm<{email: string; password: string}>({email: "", password: ""});
   const dispatch = useAppDispatch();
-  const user = useAppSelector(state => state.userInfo.user);
   const history = useHistory();
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.name === "email") {
-      setEmail(event.target.value);
-    } else {
-      setPassword(event.target.value);
-    }
-  };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (email && password) {
-      dispatch(signIn(email, password))
+    if (values.email && values.password) {
+      dispatch(signIn(values.email, values.password))
       .then(() => history.push("/profile"));
     }
   };
@@ -40,14 +30,14 @@ export const LogIn = () => {
           placeholder="E-mail"
           extraClass="mt-6 mb-6"
           name="email"
-          value={email}
+          value={values.email}
           onChange={handleChange}
         />
         <PasswordInput
           placeholder="Пароль"
           extraClass="mb-6"
           name="password"
-          value={password}
+          value={values.password}
           onChange={handleChange}
         />
         <Button htmlType="submit" type="primary" size="medium">

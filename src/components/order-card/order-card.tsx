@@ -6,13 +6,14 @@ import orderCardStyles from "./order-card.module.css";
 import { Link, useLocation } from "react-router-dom";
 import { useMemo } from "react";
 import { selectors, useAppSelector } from "../..";
-import { TOrder } from "../../services/types/data";
+import { IOrder } from "../../services/types/data";
 
 interface IOrderCardProps {
-  order: TOrder;
+  order: IOrder;
+  common: boolean;
 }
 
-export const OrderCard: React.FC<IOrderCardProps> = ({ order }) => {
+export const OrderCard: React.FC<IOrderCardProps> = ({ order, common }) => {
   const location = useLocation();
   const ingredientsData = useAppSelector(
     (state) => state.burgerIngredients.data
@@ -33,7 +34,7 @@ export const OrderCard: React.FC<IOrderCardProps> = ({ order }) => {
   return (
     <Link
       to={{
-        pathname: `/feed/${order._id}`,
+        pathname: common ? `/feed/${order._id}` : `/profile/orders/${order._id}`,
         state: { background: location },
       }}
       key={order._id}

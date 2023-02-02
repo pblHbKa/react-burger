@@ -5,7 +5,7 @@ import { useMemo, useEffect } from "react";
 import { selectors, useAppDispatch, useAppSelector } from "../..";
 import { wsInit, connectionClose } from "../../services/reduces/wsReducers";
 import { BURGER_WS_ORDERS } from "../../utils/burger-api";
-import { TIngredient } from "../../services/types/data";
+import { IIngredient } from "../../services/types/data";
 
 interface IOrderInfoProps {
   fullPage: boolean;
@@ -19,8 +19,8 @@ export const OrderInfo: React.FC<IOrderInfoProps> = ({ fullPage }) => {
   const dispatch = useAppDispatch();
 
   const {ingredients, totalPrice} = useMemo(() => {
-    let ingredientsUniq = new Map<TIngredient, number>();
-    let ingredients: Array<TIngredient> = [];
+    let ingredientsUniq = new Map<IIngredient, number>();
+    let ingredients: Array<IIngredient> = [];
     order?.ingredients.forEach((el) =>
       {const elData = ingredientsData.find((ingredient) => ingredient._id === el)!;
         ingredientsUniq.set(elData, ingredientsUniq.get(elData) === undefined ? 1 : ingredientsUniq.get(elData)! + 1)

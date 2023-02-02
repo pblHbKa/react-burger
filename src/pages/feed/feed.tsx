@@ -29,7 +29,7 @@ export const Feed = () => {
       </h1>
       <main className={feedStyles.main}>
         {data.length > 0 && (<>
-        <FeedList data={data} />
+        <FeedList data={data} common={true}/>
         <OrdersProcessing data={data} total={total} totalToday={totalToday}/>
         </>)}
       </main>

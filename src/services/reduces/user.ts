@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TUserInfo } from "../types/data";
+import { IUserInfo } from "../types/data";
 
-interface IUserInfo {
-  user: TUserInfo;
+interface IUserInfoState {
+  user: IUserInfo;
   canResetPassword: boolean;
 };
 
-const initialState: IUserInfo = {
+const initialState: IUserInfoState = {
   user: {
     email: "",
     name: "",
