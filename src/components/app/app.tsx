@@ -19,6 +19,8 @@ import { ProfileOrders } from "../../pages/profile-orders/profile-orders";
 import { useAppDispatch } from "../..";
 import { ILocationState } from "../../services/types/data";
 import { useParams } from "react-router-dom";
+import { connectionClose, wsInit } from "../../services/reduces/wsReducers";
+import { BURGER_WS_ORDERS } from "../../utils/burger-api";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -60,9 +62,9 @@ function App() {
         <ProtectedRoute onlyUnAuth={false} path="/profile" exact>
           <Profile />
         </ProtectedRoute>
-        <ProtectedRoute onlyUnAuth={false} path="/profile/orders/:id" exact>
-          <OrderInfo fullPage/>
-        </ProtectedRoute>
+        <Route path="/profile/orders/:id">
+          <OrderInfo fullPage common={false}/>
+        </Route>
         <ProtectedRoute onlyUnAuth={false} path="/profile/orders" exact>
           <ProfileOrders />
         </ProtectedRoute>
@@ -70,7 +72,7 @@ function App() {
           <Ingredient title="Детали ингредиента" />
         </Route>
         <Route path="/feed/:id">
-          <OrderInfo fullPage/>
+          <OrderInfo fullPage common/>
         </Route>
         <Route path="/feed">
           <Feed />
@@ -86,14 +88,14 @@ function App() {
               <Ingredient />
             </Modal>
           </Route>
-          <Route path="/profile/orders/:idIngredient">
+          <Route path="/profile/orders/:id">
             <Modal closeModal={onModalClose}>
-              <OrderInfo fullPage={false}/>
+              <OrderInfo fullPage={false} common={false}/>
             </Modal>
           </Route>
           <Route path="/feed/:id">
             <Modal closeModal={onModalClose}>
-              <OrderInfo fullPage={false}/>
+              <OrderInfo fullPage={false} common/>
             </Modal>
           </Route>
         </>
